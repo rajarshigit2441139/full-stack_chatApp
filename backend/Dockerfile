@@ -1,41 +1,29 @@
 # Stage 1: Build
+# This is AMD but Final image on ARM, You can use --platform=linux/arm64 (Before 'node')  here to make it ARM
 FROM node:18-alpine AS builder
 
-# Set working directory
 WORKDIR /app
-
-# Install dependencies
-COPY package.json package-lock.json ./
+COPY package*.json ./
 RUN npm ci --only=production
-
-# Copy source code
 COPY . .
 
-# Stage 2: Production
-FROM node:18-alpine
+#added
+RUN npm ci --only=production && npm cache clean --force 
 
-# Set working directory
-WORKDIR /app
+# Stage 2: Runtime
+FROM ghcr.io/rajarshigit2441139/base_images/node-18.16.0-arm64:16
 
-# Create a non-root user
-RUN addgroup -S appgroup && adduser -S appuser -G appgroup
+# (Inherits WORKDIR and USER from runtime)
+# COPY --from=builder /app /usr/src/node_app
 
-# Copy dependencies from builder
-COPY --from=builder /app/node_modules ./node_modules
-COPY --from=builder /app ./
+# Added
+COPY --from=builder /app/package*.json /usr/src/node_app/
+COPY --from=builder /app/node_modules /usr/src/node_app/node_modules
 
-# Set environment variables
 ENV NODE_ENV=production
-
-# Expose port
 EXPOSE 5001
 
-# Switch to non-root user
-USER appuser
-
-# Start the server
 CMD ["npm", "start"]
 
-# Health check
 HEALTHCHECK --interval=30s --timeout=10s --start-period=5s --retries=3 \
   CMD curl -f http://localhost:5001/health || exit 1
