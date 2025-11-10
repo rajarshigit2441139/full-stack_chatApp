@@ -14,11 +14,7 @@ RUN npm ci --only=production && npm cache clean --force
 FROM ghcr.io/rajarshigit2441139/base_images/node-18.16.0-arm64:16
 
 # (Inherits WORKDIR and USER from runtime)
-# COPY --from=builder /app /usr/src/node_app
-
-# Added
-COPY --from=builder /app/package*.json /usr/src/node_app/
-COPY --from=builder /app/node_modules /usr/src/node_app/node_modules
+COPY --from=builder /app /usr/src/node_app
 
 ENV NODE_ENV=production
 EXPOSE 5001
