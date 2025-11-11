@@ -71,7 +71,7 @@ jobs:
           version: ${{ env.version }}
           arch: ${{ matrix.arch }}
           context: ./backend
-          dockerfile: Dockerfile
+          dockerfile: ./backend/Dockerfile
           tag_prefix: ghcr.io/rajarshigit2441139/base_images/chatapp_backend
           push: "false"
           github_token: ${{ secrets.GITHUB_TOKEN }}
@@ -104,7 +104,7 @@ jobs:
           version: ${{ needs.semantic_versioning.outputs.version }}
           arch: ${{ matrix.arch }}
           context: ./backend
-          dockerfile: Dockerfile
+          dockerfile: ./backend/Dockerfile
           tag_prefix: ghcr.io/rajarshigit2441139/base_images/chatapp_backend
           push: "true"
           github_token: ${{ secrets.GITHUB_TOKEN }}
