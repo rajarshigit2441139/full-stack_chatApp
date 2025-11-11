@@ -45,7 +45,6 @@ jobs:
           echo "version=$VERSION" >> $GITHUB_OUTPUT
 
   build-test:
-    needs: semantic_versioning
     if: github.ref != 'refs/heads/main' || github.event_name == 'workflow_dispatch'
     runs-on: ubuntu-latest
     strategy:
