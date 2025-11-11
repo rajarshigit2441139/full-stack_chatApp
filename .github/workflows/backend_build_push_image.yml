@@ -52,18 +52,24 @@ jobs:
       matrix:
         arch: [arm64]
     outputs:
-      version: ${{ steps.shared.outputs.version }}
       ci_build_no: ${{ steps.shared.outputs.ci_build_no }}
     steps:
       - name: Code Check 
         id: checkout
         uses: actions/checkout@v4
 
+      - name: Set version for non-main branches
+        id: set_version
+        run: |
+          # Use latest tag if exists, otherwise fallback to '1.0.0-test'
+          VERSION=$(git describe --tags --abbrev=0 2>/dev/null || echo "1.0.0-dev")
+          echo "version=$VERSION" >> $GITHUB_ENV
+
       - name: Build-using-rajarshigit2441139-base_action
         id: shared
         uses: rajarshigit2441139/base_action/parent_action@parent_v2.0.0
         with:
-          version: ${{ needs.semantic_versioning.outputs.version }}
+          version: ${{ env.version }}
           arch: ${{ matrix.arch }}
           context: .
           dockerfile: backend/Dockerfile
@@ -114,24 +120,24 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-        #  Check out the repo
-        - name: Check out repository
-          uses: actions/checkout@v4
+      #  Check out the repo
+      - name: Check out repository
+        uses: actions/checkout@v4
       #  Get latest commit message
-        - name: Get latest commit message
-          id: get_commit
-          run: |
+      - name: Get latest commit message
+        id: get_commit
+        run: |
             message=$(git log -1 --pretty=%B)
             echo "message<<EOF" >> $GITHUB_OUTPUT
             echo "$message" >> $GITHUB_OUTPUT
             echo "EOF" >> $GITHUB_OUTPUT
         #  Configure Git
-        - name: Create and Push Git Tag
-          uses: rajarshigit2441139/base_action/git_tag_action@git_tag_v1.0.0
-          with:
+      - name: Create and Push Git Tag
+        uses: rajarshigit2441139/base_action/git_tag_action@git_tag_v1.0.0
+        with:
             tag: ${{ needs.release.outputs.version }}
             message: ${{ steps.get_commit.outputs.message }}
-        # Confirm Tag
-        - name: Confirm Tag
-          run: |
+      # Confirm Tag
+      - name: Confirm Tag
+        run: |
             echo "✅ Successfully pushed tag ${{ needs.release.outputs.version }}"
