@@ -77,7 +77,7 @@ jobs:
           github_token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Test image
-        run: docker run --rm ${{ steps.shared.outputs.tag_prefix }}-${{ matrix.arch }}-b${{ steps.shared.outputs.ci_build_no }}:${{ steps.shared.outputs.version }}
+        run: docker run --rm --platform linux/arm64 -e MONGODB_URI="mongodb://dummy:dummy@mongo:27017/test" -e JWT_SECRET="test_secret" -e PORT=5001 ${{ steps.shared.outputs.tag_prefix }}-${{ matrix.arch }}-b${{ steps.shared.outputs.ci_build_no }}:${{ steps.shared.outputs.version }}
 
   release:
     needs: semantic_versioning
