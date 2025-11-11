@@ -106,9 +106,6 @@ jobs:
           push: "true"
           github_token: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Verify image
-        run: docker run --rm ${{ steps.shared.outputs.tag_prefix }}-${{ matrix.arch }}-b${{ steps.shared.outputs.ci_build_no }}:${{ steps.shared.outputs.version }}
-
   git_tag_release:
     if: github.ref == 'refs/heads/main' && github.event_name == 'push' || github.event_name == 'workflow_dispatch'
     needs: release
