@@ -4,7 +4,7 @@ on:
   push:
     paths:
       - 'backend/**'
-      - '.github/workflows/backend-image-build-push.yml'
+      - '.github/workflows/backend_build_push_image.yml'
   workflow_dispatch:
     inputs:
       branch:
