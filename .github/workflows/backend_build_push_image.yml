@@ -1,0 +1,136 @@
+name: Backend Image Build and Push
+
+on:
+  push:
+    paths:
+      - 'backend/**'
+      - '.github/workflows/backend_build_push_image.yml'
+  workflow_dispatch:
+    inputs:
+      branch:
+        description: 'Branch to build manually'
+        required: false
+        default: 'main'
+
+jobs:
+  semantic_versioning:
+    if: github.ref == 'refs/heads/main' || github.event_name == 'workflow_dispatch'
+    runs-on: ubuntu-latest
+    outputs:
+      version: ${{ steps.get_version.outputs.version }}
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Install dependencies
+        run: npm ci 
+
+      - name: Run semantic-release dry run to set version
+        id: semantic_release
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          # Run semantic-release dry-run to calculate the next version but do not publish
+          npx semantic-release --dry-run || true
+
+      - name: Get latest version tag
+        id: get_version
+        run: |
+          VERSION=$(git describe --tags --abbrev=0 || echo "v0.0.0" )
+          echo "version=$VERSION" >> $GITHUB_OUTPUT
+
+  build-test:
+    if: github.ref != 'refs/heads/main' || github.event_name == 'workflow_dispatch'
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        arch: [arm64]
+    outputs:
+      ci_build_no: ${{ steps.shared.outputs.ci_build_no }}
+    steps:
+      - name: Code Check 
+        id: checkout
+        uses: actions/checkout@v4
+
+      - name: Set version for non-main branches
+        id: set_version
+        run: |
+          # Use latest tag if exists, otherwise fallback to '1.0.0-test'
+          VERSION=$(git describe --tags --abbrev=0 2>/dev/null || echo "1.0.0-dev")
+          echo "version=$VERSION" >> $GITHUB_ENV
+
+      - name: Build-using-rajarshigit2441139-base_action
+        id: shared
+        uses: rajarshigit2441139/base_action/parent_action@parent_v2.0.0
+        with:
+          version: ${{ env.version }}
+          arch: ${{ matrix.arch }}
+          context: ./backend
+          dockerfile: ./backend/Dockerfile
+          tag_prefix: ghcr.io/rajarshigit2441139/base_images/chatapp_backend
+          push: "false"
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+
+  release:
+    needs: semantic_versioning
+    if: github.ref == 'refs/heads/main' && github.event_name == 'push' || github.event_name == 'workflow_dispatch'
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      packages: write
+    strategy:
+      matrix:
+        arch: [arm64]
+    outputs:
+      version: ${{ steps.shared.outputs.version }}
+      ci_build_no: ${{ steps.shared.outputs.ci_build_no }}
+    steps:
+      - name: Code Check
+        id: checkout
+        uses: actions/checkout@v4
+
+      - name: Push-using-rajarshigit2441139-base_action
+        id: shared
+        uses: rajarshigit2441139/base_action/parent_action@parent_v2.0.0
+        with:
+          version: ${{ needs.semantic_versioning.outputs.version }}
+          arch: ${{ matrix.arch }}
+          context: ./backend
+          dockerfile: ./backend/Dockerfile
+          tag_prefix: ghcr.io/rajarshigit2441139/base_images/chatapp_backend
+          push: "true"
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+
+  git_tag_release:
+    if: github.ref == 'refs/heads/main' && github.event_name == 'push' || github.event_name == 'workflow_dispatch'
+    needs: release
+    name: Create Git Tag
+    runs-on: ubuntu-latest
+
+    steps:
+      #  Check out the repo
+      - name: Check out repository
+        uses: actions/checkout@v4
+      #  Get latest commit message
+      - name: Get latest commit message
+        id: get_commit
+        run: |
+            message=$(git log -1 --pretty=%B)
+            echo "message<<EOF" >> $GITHUB_OUTPUT
+            echo "$message" >> $GITHUB_OUTPUT
+            echo "EOF" >> $GITHUB_OUTPUT
+        #  Configure Git
+      - name: Create and Push Git Tag
+        uses: rajarshigit2441139/base_action/git_tag_action@git_tag_v1.0.0
+        with:
+            tag: ${{ needs.release.outputs.version }}
+            message: ${{ steps.get_commit.outputs.message }}
+      # Confirm Tag
+      - name: Confirm Tag
+        run: |
+            echo "✅ Successfully pushed tag ${{ needs.release.outputs.version }}"
