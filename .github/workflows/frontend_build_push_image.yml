@@ -129,7 +129,7 @@ jobs:
       - name: Create and Push Git Tag
         uses: rajarshigit2441139/base_action/git_tag_action@git_tag_v1.0.1
         with:
-            tag: ${{ needs.release.outputs.version }}
+            tag: f${{ needs.release.outputs.version }}
             message: ${{ steps.get_commit.outputs.message }}
       # Confirm Tag
       - name: Confirm Tag
