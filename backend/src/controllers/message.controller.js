@@ -3,11 +3,15 @@ import Message from "../models/message.model.js";
 
 import cloudinary from "../lib/cloudinary.js";
 import { getReceiverSocketId, io } from "../lib/socket.js";
+import { messagesSent } from "../lib/metrics.js"; 
 
 export const getUsersForSidebar = async (req, res) => {
   try {
     const loggedInUserId = req.user._id;
-    const filteredUsers = await User.find({ _id: { $ne: loggedInUserId } }).select("-password");
+
+    const filteredUsers = await User.find({
+      _id: { $ne: loggedInUserId },
+    }).select("-password");
 
     res.status(200).json(filteredUsers);
   } catch (error) {
@@ -42,6 +46,7 @@ export const sendMessage = async (req, res) => {
     const senderId = req.user._id;
 
     let imageUrl;
+
     if (image) {
       // Upload base64 image to cloudinary
       const uploadResponse = await cloudinary.uploader.upload(image);
@@ -56,6 +61,14 @@ export const sendMessage = async (req, res) => {
     });
 
     await newMessage.save();
+
+    // Increment total messages counter
+    messagesSent.inc();
+
+    // // Optional: track image messages separately (simple approach)
+    // if (image) {
+    //   messagesSent.inc({ type: "image" }); //  only works if you defined labelNames: ['type']
+    // }
 
     const receiverSocketId = getReceiverSocketId(receiverId);
     if (receiverSocketId) {
