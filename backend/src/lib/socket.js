@@ -12,6 +12,10 @@ const io = new Server(server, {
   },
 });
 
+app.get("/health", (req, res) => {
+  res.sendStatus(200);
+});
+
 export function getReceiverSocketId(userId) {
   return userSocketMap[userId];
 }
