@@ -4,5 +4,9 @@ export default defineConfig({
   test: {
     environment: "node",
     globals: true,
+    coverage: {
+      reporter: ["text", "html"],
+      provider: "v8",
+    },
   },
 });
