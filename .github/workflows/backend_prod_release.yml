@@ -31,7 +31,7 @@ jobs:
         uses: rajarshigit2441139/full-stack_chatApp/.github/workflows/backend_test.yml@main
         secrets: inherit
         with:
-            node_version: ${{inputs.node_version || needs.set_default_node.outputs.NODE_DEFAULT_VERSION }}
+            node_version: ${{fromJSON(inputs.node_version || needs.set_default_node.outputs.NODE_DEFAULT_VERSION) }}
 
     version:
         needs: [test, set_default_node]
@@ -39,7 +39,7 @@ jobs:
         uses: rajarshigit2441139/full-stack_chatApp/.github/workflows/semantic-version-release.yml@main
         secrets: inherit
         with:
-            node_version: ${{inputs.node_version || needs.set_default_node.outputs.NODE_DEFAULT_VERSION }}
+            node_version: ${{fromJSON(inputs.node_version || needs.set_default_node.outputs.NODE_DEFAULT_VERSION) }}
 
             app_path: backend
 
@@ -50,5 +50,5 @@ jobs:
         secrets: inherit
         with:
             version: ${{ needs.version.outputs.current_version }}
-            node_version: ${{ inputs.node_version || needs.set_default_node.outputs.NODE_DEFAULT_VERSION }}
+            node_version: ${{ fromJSON(inputs.node_version || needs.set_default_node.outputs.NODE_DEFAULT_VERSION) }}
 
