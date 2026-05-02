@@ -13,7 +13,7 @@ on:
         type: number
         description: "Node.js version"
         required: false
-        default: 20
+        default: 24
 
 jobs:
     set_default_node:
@@ -25,7 +25,7 @@ jobs:
             - name: Set default Name
               id: set-node
               run: |
-                echo "NODE_DEFAULT_VERSION=20" >> $GITHUB_OUTPUT
+                echo "NODE_DEFAULT_VERSION=24" >> $GITHUB_OUTPUT
     test:
         needs: set_default_node
         uses: rajarshigit2441139/full-stack_chatApp/.github/workflows/backend_test.yml@main

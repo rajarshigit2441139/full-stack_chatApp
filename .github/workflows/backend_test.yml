@@ -15,7 +15,7 @@ on:
         type: number
         description: "Node.js version"
         required: false
-        default: 20
+        default: 24
 
 
 jobs:
