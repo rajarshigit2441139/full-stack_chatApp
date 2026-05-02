@@ -4,11 +4,8 @@ FROM node:18-alpine AS builder
 
 WORKDIR /app
 COPY package*.json ./
-RUN npm ci --only=production
 COPY . .
-
-#added
-RUN npm ci --only=production && npm cache clean --force 
+RUN npm install --omit=dev && npm cache clean --force
 
 # Stage 2: Runtime
 FROM ghcr.io/rajarshigit2441139/base_images/node-18.16.0-arm64:16
