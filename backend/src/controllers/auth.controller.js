@@ -2,21 +2,28 @@ import { generateToken } from "../lib/utils.js";
 import User from "../models/user.model.js";
 import bcrypt from "bcryptjs";
 import cloudinary from "../lib/cloudinary.js";
+import { authEvents } from "../lib/metrics.js"; 
 
 export const signup = async (req, res) => {
   const { fullName, email, password } = req.body;
+
   try {
     if (!fullName || !email || !password) {
+      authEvents.inc({ event: "signup_failure" });
       return res.status(400).json({ message: "All fields are required" });
     }
 
     if (password.length < 6) {
+      authEvents.inc({ event: "signup_failure" });
       return res.status(400).json({ message: "Password must be at least 6 characters" });
     }
 
     const user = await User.findOne({ email });
 
-    if (user) return res.status(400).json({ message: "Email already exists" });
+    if (user) {
+      authEvents.inc({ event: "signup_failure" });
+      return res.status(400).json({ message: "Email already exists" });
+    }
 
     const salt = await bcrypt.genSalt(10);
     const hashedPassword = await bcrypt.hash(password, salt);
@@ -28,9 +35,10 @@ export const signup = async (req, res) => {
     });
 
     if (newUser) {
-      // generate jwt token here
       generateToken(newUser._id, res);
       await newUser.save();
+
+      authEvents.inc({ event: "signup_success" });
 
       res.status(201).json({
         _id: newUser._id,
@@ -39,9 +47,11 @@ export const signup = async (req, res) => {
         profilePic: newUser.profilePic,
       });
     } else {
+      authEvents.inc({ event: "signup_failure" });
       res.status(400).json({ message: "Invalid user data" });
     }
   } catch (error) {
+    authEvents.inc({ event: "signup_failure" });
     console.log("Error in signup controller", error.message);
     res.status(500).json({ message: "Internal Server Error" });
   }
@@ -49,19 +59,25 @@ export const signup = async (req, res) => {
 
 export const login = async (req, res) => {
   const { email, password } = req.body;
+
   try {
     const user = await User.findOne({ email });
 
     if (!user) {
+      authEvents.inc({ event: "login_failure" });
       return res.status(400).json({ message: "Invalid credentials" });
     }
 
     const isPasswordCorrect = await bcrypt.compare(password, user.password);
+
     if (!isPasswordCorrect) {
+      authEvents.inc({ event: "login_failure" });
       return res.status(400).json({ message: "Invalid credentials" });
     }
 
     generateToken(user._id, res);
+
+    authEvents.inc({ event: "login_success" });
 
     res.status(200).json({
       _id: user._id,
@@ -70,6 +86,7 @@ export const login = async (req, res) => {
       profilePic: user.profilePic,
     });
   } catch (error) {
+    authEvents.inc({ event: "login_failure" });
     console.log("Error in login controller", error.message);
     res.status(500).json({ message: "Internal Server Error" });
   }
@@ -78,6 +95,9 @@ export const login = async (req, res) => {
 export const logout = (req, res) => {
   try {
     res.cookie("jwt", "", { maxAge: 0 });
+
+    authEvents.inc({ event: "logout" });
+
     res.status(200).json({ message: "Logged out successfully" });
   } catch (error) {
     console.log("Error in logout controller", error.message);
@@ -95,6 +115,7 @@ export const updateProfile = async (req, res) => {
     }
 
     const uploadResponse = await cloudinary.uploader.upload(profilePic);
+
     const updatedUser = await User.findByIdAndUpdate(
       userId,
       { profilePic: uploadResponse.secure_url },

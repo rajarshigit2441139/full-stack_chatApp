@@ -1,0 +1,80 @@
+name: semantic-version-release
+
+on:
+  workflow_call:
+    inputs:
+      node_version:
+        type: number
+        description: "Node.js version"
+        required: false
+        default: 24
+      app_path:
+        type: string
+        required: true
+
+    outputs:
+      current_version:
+        description: "Released version"
+        value: ${{ jobs.release.outputs.version }}
+      released: 
+        description: true/false
+        value: ${{ jobs.release.outputs.released }}
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+
+    outputs:
+      version: ${{ steps.get_version.outputs.version }}
+      released: ${{ steps.get_version.outputs.released }}
+
+    permissions:
+      contents: write
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0   
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ inputs.node_version }}
+
+      - name: Install dependencies
+        working-directory: ${{ inputs.app_path }}
+        run: npm ci
+
+      - name: Get previous tag
+        id: prev_tag
+        run: |
+          PREFIX="${{ inputs.app_path }}-v"
+          TAG=$(git tag --list "${PREFIX}*" --sort=-v:refname | head -n 1)
+          echo "tag=$TAG" >> $GITHUB_OUTPUT
+
+      - name: Run semantic-release
+        working-directory: ${{ inputs.app_path }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          npx semantic-release
+
+      - name: Get released version
+        id: get_version
+        run: |
+          PREFIX="${{ inputs.app_path }}-v"
+
+          PREV="${{ steps.prev_tag.outputs.tag }}"
+          NEW=$(git tag --list "${PREFIX}*" --sort=-v:refname | head -n 1)
+
+          if [ -z "$NEW" ]; then
+            echo "released=false" >> $GITHUB_OUTPUT
+            echo "version=" >> $GITHUB_OUTPUT
+          elif [ "$PREV" != "$NEW" ]; then
+            echo "released=true" >> $GITHUB_OUTPUT
+            echo "version=$NEW" >> $GITHUB_OUTPUT
+          else
+            echo "released=false" >> $GITHUB_OUTPUT
+            echo "version=$NEW" >> $GITHUB_OUTPUT
+          fi

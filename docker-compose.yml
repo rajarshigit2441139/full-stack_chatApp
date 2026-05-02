@@ -4,7 +4,7 @@ services:
       context: ./frontend
       dockerfile: Dockerfile
     ports:
-      - "8080:80"
+      - "8081:80"
     depends_on:
       - backend
     networks:
@@ -40,19 +40,34 @@ services:
       - chat-network
     restart: unless-stopped
 
+  prometheus:
+    image: prom/prometheus:latest
+    ports:
+      - "9092:9090"
+    volumes:
+      - ./prometheus.yml:/etc/prometheus/prometheus.yml
+      - prometheus_data:/prometheus
+    networks:
+      - chat-network
+    restart: unless-stopped
+    depends_on:
+      - backend
+
+  nginx-exporter:
+    image: nginx/nginx-prometheus-exporter:latest
+    command:
+      - -nginx.scrape-uri=http://frontend/nginx_status
+    ports:
+      - "9113:9113"
+    networks:
+      - chat-network
+    depends_on:
+      - frontend
+
 networks:
   chat-network:
     driver: bridge
 
 volumes:
   mongodb_data:
-
-
-
-
-
-
-
-
-
-
+  prometheus_data:
