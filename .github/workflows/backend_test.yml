@@ -17,6 +17,15 @@ on:
         required: false
         default: 24
 
+  workflow_dispatch:
+    inputs:
+      node_version:
+        type: number
+        description: "Node.js version"
+        required: false
+        default: 24
+
+
 env:
   FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
   
@@ -43,6 +52,10 @@ jobs:
             node-version: ${{ fromJSON(inputs.node_version || needs.set_default_node.outputs.NODE_DEFAULT_VERSION) }}
             cache: "npm"
             cache-dependency-path: backend/package-lock.json
+
+        - name: Sync package-lock.json
+          working-directory: backend
+          run: npm install --package-lock-only
 
         - name: Install dependencies
           working-directory: backend
