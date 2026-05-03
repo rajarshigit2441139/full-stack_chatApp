@@ -6,6 +6,12 @@ on:
         - "rc"
     paths:
       - 'backend/**'
+  pull_request:
+    types: [closed]
+    branches:
+      - "rc"
+    paths:
+      - 'backend/**'
 
   workflow_dispatch:
     inputs:
@@ -20,7 +26,7 @@ env:
   
 jobs:
     set_default_node:
-        if: github.event_name == 'workflow_dispatch' || github.event.pull_request.merged == true
+        if: github.event_name == 'workflow_dispatch' || github.event_name == 'push' || github.event.pull_request.merged == true
         runs-on: ubuntu-latest
         outputs:
             NODE_DEFAULT_VERSION: ${{ steps.set-node.outputs.NODE_DEFAULT_VERSION }}
