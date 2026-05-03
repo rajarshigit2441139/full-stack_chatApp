@@ -26,14 +26,13 @@ env:
 jobs:
   release:
     runs-on: ubuntu-latest
-
+    permissions:
+      contents: write
+      issues: write
     outputs:
       version: ${{ steps.get_version.outputs.version }}
       released: ${{ steps.get_version.outputs.released }}
-
-    permissions:
-      contents: write
-
+      
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
