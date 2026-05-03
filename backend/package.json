@@ -11,7 +11,7 @@
     "test": "vitest run",
     "test:coverage": "vitest run --coverage",
     "release": "semantic-release",
-    "prepare": "cd .. && husky backend/.husky"
+    "prepare":  "[ -z \"$CI\" ] && cd .. && husky install backend/.husky || true"
   },
   "dependencies": {
     "bcryptjs": "^2.4.3",
