@@ -1,0 +1,64 @@
+name: Backend Docker Build 
+
+on:
+  workflow_call:
+    inputs:
+      node_version:
+        type: number
+        description: "Node.js version"
+        required: false
+        default: 24
+      version:
+        type: string
+        description: Release Version
+        required: true
+
+env:
+  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
+  
+jobs:
+  build:
+    if: inputs.version != ''
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write 
+    strategy:
+      matrix:
+        arch: [arm64]
+    steps:
+      - name: Code Check 
+        id: checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Validate version
+        run: |
+          if [ -z "${{ inputs.version }}" ]; then
+            echo "Version is empty"
+            exit 1;    
+          else
+            echo "version: ${{ inputs.version }}"
+          fi
+
+      - name: Normalize version
+        id: normalize
+        run: |
+          VERSION="${{ inputs.version }}"
+          CLEAN_VERSION="${VERSION#backend-v}"
+          echo "clean_version=$CLEAN_VERSION" >> $GITHUB_OUTPUT
+
+      - name: Build-using-rajarshigit2441139-base_action
+        id: shared
+        uses: rajarshigit2441139/base_action/parent_action@parent_v2.0.0
+        with:
+          version:  ${{ steps.normalize.outputs.clean_version }}
+          arch: ${{ matrix.arch }}
+          context: ./backend
+          dockerfile: ./backend/Dockerfile
+          tag_prefix: ghcr.io/rajarshigit2441139/chatapp/backend
+          push: "true"
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          
+      

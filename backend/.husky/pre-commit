@@ -1,0 +1,8 @@
+#!/bin/sh
+
+cd backend || exit 1
+
+echo "Syncing package-lock.json..."
+npm install --package-lock-only
+
+git add package-lock.json
