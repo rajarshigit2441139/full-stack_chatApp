@@ -59,8 +59,10 @@ jobs:
         working-directory: ${{ inputs.app_path }}
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_REF: refs/heads/main         
+          GITHUB_EVENT_NAME: push
         run: |
-          npx semantic-release
+          npx semantic-release || true
 
       - name: Get released version
         id: get_version
