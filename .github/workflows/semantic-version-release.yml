@@ -63,7 +63,7 @@ jobs:
         working-directory: ${{ inputs.app_path }}
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          GITHUB_REF: refs/heads/main         
+          GITHUB_REF: ${{ github.event.pull_request.base.ref == 'main' && 'refs/heads/main' || github.ref }}
           GITHUB_EVENT_NAME: push
         run: |
           npx semantic-release || true
