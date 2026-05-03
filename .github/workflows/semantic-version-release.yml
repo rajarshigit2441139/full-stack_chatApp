@@ -43,6 +43,10 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: ${{ inputs.node_version }}
+      
+      - name: Sync package-lock.json
+        working-directory: ${{ inputs.app_path }}
+        run: npm install --package-lock-only
 
       - name: Install dependencies
         working-directory: ${{ inputs.app_path }}
