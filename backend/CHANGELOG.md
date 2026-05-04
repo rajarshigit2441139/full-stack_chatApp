@@ -1,3 +1,11 @@
+## [1.0.1](https://github.com/rajarshigit2441139/full-stack_chatApp/compare/backend-v1.0.0...backend-v1.0.1) (2026-05-04)
+
+
+### Bug Fixes
+
+* **ci:** add dynamic overwrite of GITHUB_REF &  GITHUB_EVENT_NAME ([aee2520](https://github.com/rajarshigit2441139/full-stack_chatApp/commit/aee2520cf0f2b065270c392dcb4b083f92db0074)), closes [#9](https://github.com/rajarshigit2441139/full-stack_chatApp/issues/9)
+* **CI:** update parent_action ([9020a2d](https://github.com/rajarshigit2441139/full-stack_chatApp/commit/9020a2da38667ddf2a3db8af03fe79fbc7368356)), closes [#12](https://github.com/rajarshigit2441139/full-stack_chatApp/issues/12)
+
 ## [1.0.1-rc.1](https://github.com/rajarshigit2441139/full-stack_chatApp/compare/backend-v1.0.0...backend-v1.0.1-rc.1) (2026-05-04)
 
 
