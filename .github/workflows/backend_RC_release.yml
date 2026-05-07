@@ -35,14 +35,14 @@ jobs:
                 echo "NODE_DEFAULT_VERSION=24" >> $GITHUB_OUTPUT
     test:
         needs: set_default_node
-        uses: rajarshigit2441139/full-stack_chatApp/.github/workflows/backend_test.yml@main
+        uses: rajarshigit2441139/full-stack_chatApp/.github/workflows/backend_test.yml@workflow
         secrets: inherit
         with:
             node_version: ${{ fromJSON((inputs.node_version != '' && inputs.node_version) || needs.set_default_node.outputs.NODE_DEFAULT_VERSION) }}
 
     version:
         needs: [test, set_default_node]
-        uses: rajarshigit2441139/full-stack_chatApp/.github/workflows/semantic-version-release.yml@main
+        uses: rajarshigit2441139/full-stack_chatApp/.github/workflows/semantic-version-release.yml@workflow
         secrets: inherit
         with:
             node_version: ${{ fromJSON((inputs.node_version != '' && inputs.node_version) || needs.set_default_node.outputs.NODE_DEFAULT_VERSION) }}
@@ -52,7 +52,7 @@ jobs:
     rc_release:
         needs: [version, set_default_node]
         if: needs.version.outputs.released == 'true'
-        uses: rajarshigit2441139/full-stack_chatApp/.github/workflows/backend_docker_build.yml@main
+        uses: rajarshigit2441139/full-stack_chatApp/.github/workflows/backend_docker_build.yml@workflow
         secrets: inherit
         with:
             version: ${{ needs.version.outputs.current_version }}
