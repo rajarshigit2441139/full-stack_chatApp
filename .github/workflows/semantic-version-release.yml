@@ -76,6 +76,10 @@ jobs:
           GITHUB_EVENT_NAME: ${{ github.event_name == 'pull_request' && 'push' || github.event_name }}
         run: |
           npx semantic-release || true
+          
+      
+      - name: Fetch latest tags
+        run: git fetch --tags
 
       - name: Get released version
         id: get_version
