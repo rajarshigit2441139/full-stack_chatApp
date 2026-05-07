@@ -15,6 +15,10 @@ on:
         description: "Node.js version"
         required: false
         default: 24
+      is_prerelease:
+        type: boolean
+        required: false
+        default: false
 
 env:
   FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
