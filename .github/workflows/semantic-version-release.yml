@@ -99,7 +99,9 @@ jobs:
 
           if [ -n "$NEW" ]; then
             version="$NEW"
-            if [ "$PREV" != "$NEW" ]; then
+            if [ -z "$PREV" ]; then
+              released=true
+            elif [ "$PREV" != "$NEW" ]; then
               released=true
             fi
           fi
