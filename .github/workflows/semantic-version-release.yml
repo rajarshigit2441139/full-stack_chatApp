@@ -11,6 +11,10 @@ on:
       app_path:
         type: string
         required: true
+      is_prerelease:
+        type: boolean
+        required: false
+        default: false
 
     outputs:
       current_version:
@@ -56,7 +60,11 @@ jobs:
         id: prev_tag
         run: |
           PREFIX="${{ inputs.app_path }}-v"
-          TAG=$(git tag --list "${PREFIX}*" --sort=-v:refname | head -n 1)
+          if [ "${{ inputs.is_prerelease }}" == "true" ]; then
+            TAG=$(git tag --list "${PREFIX}*" --sort=-v:refname | head -n 1)
+          else
+            TAG=$(git tag --list "${PREFIX}*" --sort=-v:refname | grep -v '\-' | head -n 1)
+          fi
           echo "tag=$TAG" >> $GITHUB_OUTPUT
           echo "prev-tag=$TAG"
 
@@ -75,7 +83,12 @@ jobs:
           PREFIX="${{ inputs.app_path }}-v"
 
           PREV="${{ steps.prev_tag.outputs.tag }}"
-          NEW=$(git tag --list "${PREFIX}*" --sort=-v:refname | head -n 1)
+
+          if [ "${{ inputs.is_prerelease }}" == "true" ]; then
+            NEW=$(git tag --list "${PREFIX}*" --sort=-v:refname | head -n 1)
+          else
+            NEW=$(git tag --list "${PREFIX}*" --sort=-v:refname | grep -v '\-' | head -n 1)
+          fi
 
           released=false
           version=""
