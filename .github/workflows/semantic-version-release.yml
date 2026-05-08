@@ -61,6 +61,8 @@ jobs:
         id: prev_tag
         run: |
           git fetch --tags --force
+          echo "Tags before semantic-release:"
+          git tag --list "${{ inputs.app_path }}-v*"
 
           PREFIX="${{ inputs.app_path }}-v"
           if [ "${{ inputs.is_prerelease }}" == "true" ]; then
