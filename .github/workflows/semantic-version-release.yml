@@ -82,21 +82,26 @@ jobs:
       - name: Fetch latest tags
         run: |
           git fetch --tags --force
+          git fetch origin --prune --prune-tags
           echo "Available tags after fetch:"
-          git tag --list "backend-v*"
+          git tag --list
 
       - name: Get released version
         id: get_version
         run: |
           PREFIX="${{ inputs.app_path }}-v"
-
           PREV="${{ steps.prev_tag.outputs.tag }}"
+
+          echo "Debug - all tags visible:"
+          git tag --list "${PREFIX}*"
 
           if [ "${{ inputs.is_prerelease }}" == "true" ]; then
             NEW=$(git tag --list "${PREFIX}*" --sort=-v:refname | head -n 1)
           else
             NEW=$(git tag --list "${PREFIX}*" --sort=-v:refname | grep -v '\-' | head -n 1)
           fi
+
+          echo "Debug - PREV=$PREV, NEW=$NEW"
 
           released=false
           version=""
