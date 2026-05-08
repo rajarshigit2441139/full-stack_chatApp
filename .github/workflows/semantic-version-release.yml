@@ -56,10 +56,12 @@ jobs:
       - name: Install dependencies
         working-directory: ${{ inputs.app_path }}
         run: npm ci
-
+      
       - name: Get previous tag
         id: prev_tag
         run: |
+          git fetch --tags --force
+
           PREFIX="${{ inputs.app_path }}-v"
           if [ "${{ inputs.is_prerelease }}" == "true" ]; then
             TAG=$(git tag --list "${PREFIX}*" --sort=-v:refname | head -n 1)
@@ -83,8 +85,8 @@ jobs:
         run: |
           git fetch --tags --force
           git fetch origin --prune --prune-tags
-          echo "Available tags after fetch:"
-          git tag --list
+          echo "Available tags after semantic-release:"
+          git tag --list "${{ inputs.app_path }}-v*"
 
       - name: Get released version
         id: get_version
