@@ -56,15 +56,28 @@ jobs:
       - name: Install dependencies
         working-directory: ${{ inputs.app_path }}
         run: npm ci
-
+      
       - name: Get previous tag
         id: prev_tag
         run: |
           PREFIX="${{ inputs.app_path }}-v"
+          git fetch --tags --force
+          echo "Tags before semantic-release:"
+          git tag --list "${PREFIX}*"
+          
+          echo "Sorted tags:"
+          git tag --list "${PREFIX}*" --sort=-v:refname
+          echo "Filtered tags(rc):"
+          git tag --list "${PREFIX}*" --sort=-v:refname | grep '\-rc'
+          echo "Filtered tags(prod):"
+          git tag --list "${PREFIX}*" --sort=-v:refname | grep -v '\-rc'
+
+          
+
           if [ "${{ inputs.is_prerelease }}" == "true" ]; then
-            TAG=$(git tag --list "${PREFIX}*" --sort=-v:refname | head -n 1)
+            TAG=$(git tag --list "${PREFIX}*" --sort=-v:refname | grep '\-rc' | head -n 1)
           else
-            TAG=$(git tag --list "${PREFIX}*" --sort=-v:refname | grep -v '\-' | head -n 1)
+            TAG=$( git tag --list "${PREFIX}*" --sort=-v:refname | grep -v '\-rc' | head -n 1 )
           fi
           echo "tag=$TAG" >> $GITHUB_OUTPUT
           echo "prev-tag=$TAG"
@@ -82,21 +95,26 @@ jobs:
       - name: Fetch latest tags
         run: |
           git fetch --tags --force
-          echo "Available tags after fetch:"
-          git tag --list "backend-v*"
+          git fetch origin --prune --prune-tags
+          echo "Available tags after semantic-release:"
+          git tag --list "${{ inputs.app_path }}-v*"
 
       - name: Get released version
         id: get_version
         run: |
           PREFIX="${{ inputs.app_path }}-v"
-
           PREV="${{ steps.prev_tag.outputs.tag }}"
 
+          echo "Debug - all tags visible:"
+          git tag --list "${PREFIX}*"
+
           if [ "${{ inputs.is_prerelease }}" == "true" ]; then
-            NEW=$(git tag --list "${PREFIX}*" --sort=-v:refname | head -n 1)
+            NEW=$(git tag --list "${PREFIX}*" --sort=-v:refname | grep '\-rc' | head -n 1)
           else
-            NEW=$(git tag --list "${PREFIX}*" --sort=-v:refname | grep -v '\-' | head -n 1)
+            NEW=$(git tag --list "${PREFIX}*" --sort=-v:refname | grep -v '\-rc' | head -n 1)
           fi
+
+          echo "Debug - PREV=$PREV, NEW=$NEW"
 
           released=false
           version=""
