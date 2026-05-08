@@ -109,9 +109,9 @@ jobs:
           git tag --list "${PREFIX}*"
 
           if [ "${{ inputs.is_prerelease }}" == "true" ]; then
-            NEW=$(git tag --list "${PREFIX}*" --sort=-v:refname | head -n 1)
+            NEW=$(git tag --list "${PREFIX}*" --sort=-v:refname | grep '\-rc' | head -n 1)
           else
-            NEW=$(git tag --list "${PREFIX}*" --sort=-v:refname | grep -v '\-' | head -n 1)
+            NEW=$(git tag --list "${PREFIX}*" --sort=-v:refname | grep -v '\-rc' | head -n 1)
           fi
 
           echo "Debug - PREV=$PREV, NEW=$NEW"
