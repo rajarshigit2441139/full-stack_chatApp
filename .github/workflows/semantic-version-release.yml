@@ -80,7 +80,10 @@ jobs:
           
       
       - name: Fetch latest tags
-        run: git fetch --tags
+        run: |
+          git fetch --tags --force
+          echo "Available tags after fetch:"
+          git tag --list "backend-v*"
 
       - name: Get released version
         id: get_version
