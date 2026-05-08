@@ -60,11 +60,20 @@ jobs:
       - name: Get previous tag
         id: prev_tag
         run: |
+          PREFIX="${{ inputs.app_path }}-v"
           git fetch --tags --force
           echo "Tags before semantic-release:"
-          git tag --list "${{ inputs.app_path }}-v*"
+          git tag --list "${PREFIX}*"
+          
+          echo "Sorted tags:"
+          git tag --list "${PREFIX}*" --sort=-v:refname
+          echo "Filtered tags:"
+          git tag --list "${PREFIX}*" --sort=-v:refname | grep -v '\-'
+          echo "Head result:"
+          git tag --list "${PREFIX}*" --sort=-v:refname | grep -v '\-' | head -n 1
 
-          PREFIX="${{ inputs.app_path }}-v"
+          
+
           if [ "${{ inputs.is_prerelease }}" == "true" ]; then
             TAG=$(git tag --list "${PREFIX}*" --sort=-v:refname | head -n 1)
           else
