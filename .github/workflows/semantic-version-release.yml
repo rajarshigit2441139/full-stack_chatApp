@@ -67,17 +67,17 @@ jobs:
           
           echo "Sorted tags:"
           git tag --list "${PREFIX}*" --sort=-v:refname
-          echo "Filtered tags:"
-          git tag --list "${PREFIX}*" --sort=-v:refname | grep -v '\-'
-          echo "Head result:"
-          git tag --list "${PREFIX}*" --sort=-v:refname | grep -v '\-' | head -n 1
+          echo "Filtered tags(rc):"
+          git tag --list "${PREFIX}*" --sort=-v:refname | grep '\-rc'
+          echo "Filtered tags(prod):"
+          git tag --list "${PREFIX}*" --sort=-v:refname | grep -v '\-rc'
 
           
 
           if [ "${{ inputs.is_prerelease }}" == "true" ]; then
-            TAG=$(git tag --list "${PREFIX}*" --sort=-v:refname | head -n 1)
+            TAG=$(git tag --list "${PREFIX}*" --sort=-v:refname | grep '\-rc' | head -n 1)
           else
-            TAG=$(git tag --list "${PREFIX}*" --sort=-v:refname | grep -v '\-' | head -n 1)
+            TAG=$( git tag --list "${PREFIX}*" --sort=-v:refname | grep -v '\-rc' | head -n 1 )
           fi
           echo "tag=$TAG" >> $GITHUB_OUTPUT
           echo "prev-tag=$TAG"
