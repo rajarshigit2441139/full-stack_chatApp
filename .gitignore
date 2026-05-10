@@ -24,3 +24,4 @@ dist-ssr
 *.sw?
 .env
 coverage/
+old_frontend_build_push_image.yml
