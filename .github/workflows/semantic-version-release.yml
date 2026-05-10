@@ -86,12 +86,9 @@ jobs:
         working-directory: ${{ inputs.app_path }}
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          GITHUB_REF: ${{ github.event_name == 'pull_request' && format('refs/heads/{0}', github.event.pull_request.base.ref) || github.ref }}
-          GITHUB_EVENT_NAME: ${{ github.event_name == 'pull_request' && 'push' || github.event_name }}
         run: |
           npx semantic-release || true
           
-      
       - name: Fetch latest tags
         run: |
           git fetch --tags --force
