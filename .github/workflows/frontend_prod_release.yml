@@ -1,0 +1,63 @@
+name: Frontend Prod DockerImage Release
+
+on:
+  pull_request_target:
+    types: [closed]
+    branches:
+      - main
+    paths:
+      - "frontend/**"
+
+  workflow_dispatch:
+    inputs:
+      node_version:
+        type: number
+        description: "Node.js version"
+        required: false
+        default: 24
+      is_prerelease:
+        type: boolean
+        required: false
+        default: false
+
+env:
+  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
+
+jobs:
+  set_default_node:
+    if: github.event_name == 'workflow_dispatch' || github.event.pull_request.merged == true
+    runs-on: ubuntu-latest
+    outputs:
+      NODE_DEFAULT_VERSION: ${{ steps.set-node.outputs.NODE_DEFAULT_VERSION }}
+    steps:
+      - name: Set default Node version
+        id: set-node
+        run: |
+          echo "NODE_DEFAULT_VERSION=24" >> $GITHUB_OUTPUT
+
+  test:
+    needs: set_default_node
+    if: github.event_name == 'workflow_dispatch' || github.event.pull_request.merged == true
+    uses: rajarshigit2441139/full-stack_chatApp/.github/workflows/frontend_test.yml@workflow
+    secrets: inherit
+    with:
+      node_version: ${{ fromJSON((inputs.node_version != '' && inputs.node_version) || needs.set_default_node.outputs.NODE_DEFAULT_VERSION) }}
+
+  version:
+    needs: [test, set_default_node]
+    if: github.event_name == 'workflow_dispatch' || github.event.pull_request.merged == true
+    uses: rajarshigit2441139/full-stack_chatApp/.github/workflows/semantic-version-release.yml@workflow
+    secrets: inherit
+    with:
+      node_version: ${{ fromJSON((inputs.node_version != '' && inputs.node_version) || needs.set_default_node.outputs.NODE_DEFAULT_VERSION) }}
+      app_path: frontend
+      is_prerelease: false
+
+  prod_release:
+    needs: [version, set_default_node]
+    if: (github.event_name == 'workflow_dispatch' || github.event.pull_request.merged == true) && needs.version.outputs.released == 'true'
+    uses: rajarshigit2441139/full-stack_chatApp/.github/workflows/frontend_docker_build.yml@workflow
+    secrets: inherit
+    with:
+      version: ${{ needs.version.outputs.current_version }}
+      node_version: ${{ fromJSON((inputs.node_version != '' && inputs.node_version) || needs.set_default_node.outputs.NODE_DEFAULT_VERSION) }}

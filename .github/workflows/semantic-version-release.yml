@@ -66,11 +66,11 @@ jobs:
           git tag --list "${PREFIX}*"
           
           echo "Sorted tags:"
-          git tag --list "${PREFIX}*" --sort=-v:refname
+          git tag --list "${PREFIX}*" --sort=-v:refname || echo " No Tag Found"
           echo "Filtered tags(rc):"
-          git tag --list "${PREFIX}*" --sort=-v:refname | grep '\-rc'
+          git tag --list "${PREFIX}*" --sort=-v:refname | grep '\-rc' || echo " No Tag Found"
           echo "Filtered tags(prod):"
-          git tag --list "${PREFIX}*" --sort=-v:refname | grep -v '\-rc'
+          git tag --list "${PREFIX}*" --sort=-v:refname | grep -v '\-rc' || echo " No Tag Found"
 
           
 
