@@ -23,8 +23,11 @@ dist-ssr
 *.sln
 *.sw?
 .env
+
 package-lock.json
 package.json
 coverage/
 k8s/todo*
 tmp/
+coverage/
+

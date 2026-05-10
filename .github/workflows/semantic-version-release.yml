@@ -1,0 +1,132 @@
+name: semantic-version-release
+
+on:
+  workflow_call:
+    inputs:
+      node_version:
+        type: number
+        description: "Node.js version"
+        required: false
+        default: 24
+      app_path:
+        type: string
+        required: true
+      is_prerelease:
+        type: boolean
+        required: false
+        default: false
+
+    outputs:
+      current_version:
+        description: "Released version"
+        value: ${{ jobs.release.outputs.version }}
+      released: 
+        description: true/false
+        value: ${{ jobs.release.outputs.released }}
+
+env:
+  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
+  
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      issues: write
+    outputs:
+      version: ${{ steps.get_version.outputs.version }}
+      released: ${{ steps.get_version.outputs.released }}
+      
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          ref: ${{ github.event.pull_request.merge_commit_sha || github.ref }} 
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ inputs.node_version }}
+      
+      - name: Sync package-lock.json
+        working-directory: ${{ inputs.app_path }}
+        run: npm install --package-lock-only
+
+      - name: Install dependencies
+        working-directory: ${{ inputs.app_path }}
+        run: npm ci
+      
+      - name: Get previous tag
+        id: prev_tag
+        run: |
+          PREFIX="${{ inputs.app_path }}-v"
+          git fetch --tags --force
+          echo "Tags before semantic-release:"
+          git tag --list "${PREFIX}*"
+          
+          echo "Sorted tags:"
+          git tag --list "${PREFIX}*" --sort=-v:refname || echo " No Tag Found"
+          echo "Filtered tags(rc):"
+          git tag --list "${PREFIX}*" --sort=-v:refname | grep '\-rc' || echo " No Tag Found"
+          echo "Filtered tags(prod):"
+          git tag --list "${PREFIX}*" --sort=-v:refname | grep -v '\-rc' || echo " No Tag Found"
+
+          
+
+          if [ "${{ inputs.is_prerelease }}" == "true" ]; then
+            TAG=$(git tag --list "${PREFIX}*" --sort=-v:refname | grep '\-rc' | head -n 1)
+          else
+            TAG=$( git tag --list "${PREFIX}*" --sort=-v:refname | grep -v '\-rc' | head -n 1 )
+          fi
+          echo "tag=$TAG" >> $GITHUB_OUTPUT
+          echo "prev-tag=$TAG"
+
+      - name: Run semantic-release
+        working-directory: ${{ inputs.app_path }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          npx semantic-release || true
+          
+      - name: Fetch latest tags
+        run: |
+          git fetch --tags --force
+          git fetch origin --prune --prune-tags
+          echo "Available tags after semantic-release:"
+          git tag --list "${{ inputs.app_path }}-v*"
+
+      - name: Get released version
+        id: get_version
+        run: |
+          PREFIX="${{ inputs.app_path }}-v"
+          PREV="${{ steps.prev_tag.outputs.tag }}"
+
+          echo "Debug - all tags visible:"
+          git tag --list "${PREFIX}*"
+
+          if [ "${{ inputs.is_prerelease }}" == "true" ]; then
+            NEW=$(git tag --list "${PREFIX}*" --sort=-v:refname | grep '\-rc' | head -n 1)
+          else
+            NEW=$(git tag --list "${PREFIX}*" --sort=-v:refname | grep -v '\-rc' | head -n 1)
+          fi
+
+          echo "Debug - PREV=$PREV, NEW=$NEW"
+
+          released=false
+          version=""
+
+          if [ -n "$NEW" ]; then
+            version="$NEW"
+            if [ -z "$PREV" ]; then
+              released=true
+            elif [ "$PREV" != "$NEW" ]; then
+              released=true
+            fi
+          fi
+
+          echo "released=$released" >> $GITHUB_OUTPUT
+          echo "version=$version" >> $GITHUB_OUTPUT
+
+          echo "released=$released"
+          echo "version=$version"

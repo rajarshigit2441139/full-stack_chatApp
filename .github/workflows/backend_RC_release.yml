@@ -1,0 +1,59 @@
+name: Backend RC DockerImage Release
+
+on:
+  push:
+    branches:
+        - "rc"
+    paths:
+      - 'backend/**'
+
+  workflow_dispatch:
+    inputs:
+      node_version:
+        type: number
+        description: "Node.js version"
+        required: false
+        default: 24
+      is_prerelease:
+        type: boolean
+        required: false
+        default: false
+
+env:
+  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
+  
+jobs:
+    set_default_node:
+        if: github.ref == 'refs/heads/rc'
+        runs-on: ubuntu-latest
+        outputs:
+            NODE_DEFAULT_VERSION: ${{ steps.set-node.outputs.NODE_DEFAULT_VERSION }}
+        steps:
+            - name: Set default Name
+              id: set-node
+              run: |
+                echo "NODE_DEFAULT_VERSION=24" >> $GITHUB_OUTPUT
+    test:
+        needs: set_default_node
+        uses: rajarshigit2441139/full-stack_chatApp/.github/workflows/backend_test.yml@workflow
+        secrets: inherit
+        with:
+            node_version: ${{ fromJSON((inputs.node_version != '' && inputs.node_version) || needs.set_default_node.outputs.NODE_DEFAULT_VERSION) }}
+
+    version:
+        needs: [test, set_default_node]
+        uses: rajarshigit2441139/full-stack_chatApp/.github/workflows/semantic-version-release.yml@workflow
+        secrets: inherit
+        with:
+            node_version: ${{ fromJSON((inputs.node_version != '' && inputs.node_version) || needs.set_default_node.outputs.NODE_DEFAULT_VERSION) }}
+            app_path: backend
+            is_prerelease: true
+
+    rc_release:
+        needs: [version, set_default_node]
+        if: needs.version.outputs.released == 'true'
+        uses: rajarshigit2441139/full-stack_chatApp/.github/workflows/backend_docker_build.yml@workflow
+        secrets: inherit
+        with:
+            version: ${{ needs.version.outputs.current_version }}
+            node_version: ${{ fromJSON((inputs.node_version != '' && inputs.node_version) || needs.set_default_node.outputs.NODE_DEFAULT_VERSION) }}
