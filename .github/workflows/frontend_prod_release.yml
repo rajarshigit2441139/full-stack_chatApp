@@ -1,12 +1,11 @@
 name: Frontend Prod DockerImage Release
 
 on:
-  pull_request_target:
-    types: [closed]
+  push:
     branches:
-      - main
+        - "main"
     paths:
-      - "frontend/**"
+      - 'frontend/**'
 
   workflow_dispatch:
     inputs:

@@ -86,8 +86,6 @@ jobs:
         working-directory: ${{ inputs.app_path }}
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          GITHUB_REF: ${{ (github.event_name == 'pull_request' || github.event_name == 'pull_request_target') && format('refs/heads/{0}', github.event.pull_request.base.ref) || github.ref }}
-          GITHUB_EVENT_NAME: ${{ (github.event_name == 'pull_request' || github.event_name == 'pull_request_target') && 'push' || github.event_name }}
         run: |
           npx semantic-release || true
           

@@ -1,12 +1,11 @@
 name: Backend Prod DockerImage Release
 
 on:
-  pull_request_target:
-    types: [closed]
+  push:
     branches:
-      - main
+        - "main"
     paths:
-      - "backend/**"
+      - 'backend/**'
 
   workflow_dispatch:
     inputs:
