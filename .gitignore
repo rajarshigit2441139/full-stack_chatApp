@@ -25,8 +25,7 @@ dist-ssr
 .env
 package-lock.json
 package.json
-tmp/
 k8s/todo.md
 node_modules
 tmp
-k8s/argocd/
+node_modules
