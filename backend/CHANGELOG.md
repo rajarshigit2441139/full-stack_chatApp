@@ -1,3 +1,13 @@
+## [1.0.1-rc.1](https://github.com/rajarshigit2441139/full-stack_chatApp/compare/backend-v1.0.0...backend-v1.0.1-rc.1) (2026-05-10)
+
+
+### Bug Fixes
+
+* **ci:** Update frontend ci ([43bdb51](https://github.com/rajarshigit2441139/full-stack_chatApp/commit/43bdb51c8725878ad7497e7dcd622c2f318583b9)), closes [#30](https://github.com/rajarshigit2441139/full-stack_chatApp/issues/30)
+* **ci:** Update frontend CI ([a929933](https://github.com/rajarshigit2441139/full-stack_chatApp/commit/a9299330af4e464624bfd1be03697b4d8b99ffd8)), closes [#31](https://github.com/rajarshigit2441139/full-stack_chatApp/issues/31)
+* **CI:** Update frontend ci ([634e7a5](https://github.com/rajarshigit2441139/full-stack_chatApp/commit/634e7a50b6ad212d8fe4d598d5e115f820f3ba93))
+* **ci:** update semantic-version git reff logic ([f18b206](https://github.com/rajarshigit2441139/full-stack_chatApp/commit/f18b206547f2f10cc953da2cf258ccea0dfdf86c)), closes [#32](https://github.com/rajarshigit2441139/full-stack_chatApp/issues/32)
+
 # 1.0.0 (2026-05-08)
 
 
