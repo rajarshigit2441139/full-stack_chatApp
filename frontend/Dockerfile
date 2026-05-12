@@ -8,17 +8,11 @@ COPY . .
 RUN npm run build
 
 # Production stage
-FROM ghcr.io/rajarshigit2441139/base_images/nginx-1.29-arm64:4
-
-# envsubst
-RUN apk add --no-cache gettext
+FROM ghcr.io/rajarshigit2441139/base_images/nginx-1.29-arm64:11
 
 COPY --from=build /app/dist /usr/share/nginx/html
 
 COPY nginx.conf.template /etc/nginx/templates/default.conf.template
-
-COPY docker-entrypoint.sh /docker-entrypoint.sh
-RUN chmod +x /docker-entrypoint.sh
 
 USER root
 
@@ -30,4 +24,4 @@ USER nginx
 
 EXPOSE 80
 
-ENTRYPOINT ["/docker-entrypoint.sh"]
+# ENTRYPOINT ["/docker-entrypoint.sh"]
