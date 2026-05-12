@@ -1,3 +1,19 @@
+# [1.0.0-rc.2](https://github.com/rajarshigit2441139/full-stack_chatApp/compare/frontend-v1.0.0-rc.1...frontend-v1.0.0-rc.2) (2026-05-12)
+
+
+### Bug Fixes
+
+* **CI:** add missing is_prerelease: option ([114e020](https://github.com/rajarshigit2441139/full-stack_chatApp/commit/114e020b3fa934b7e6799007a6d1d4231a5d2ada)), closes [#25](https://github.com/rajarshigit2441139/full-stack_chatApp/issues/25)
+* **ci:** fix fetching of old and new tags ([91524c6](https://github.com/rajarshigit2441139/full-stack_chatApp/commit/91524c6243d6adafd4c3c590226a69b664a32ea9)), closes [#29](https://github.com/rajarshigit2441139/full-stack_chatApp/issues/29)
+* **ci:** force git fetch to collect all tags ([a12ef85](https://github.com/rajarshigit2441139/full-stack_chatApp/commit/a12ef856f44f042c094158bcb3ae4576d4b5e38f)), closes [#27](https://github.com/rajarshigit2441139/full-stack_chatApp/issues/27)
+* **ci:** Update frontend CI ([a929933](https://github.com/rajarshigit2441139/full-stack_chatApp/commit/a9299330af4e464624bfd1be03697b4d8b99ffd8)), closes [#31](https://github.com/rajarshigit2441139/full-stack_chatApp/issues/31)
+* **ci:** update semantic-version git reff logic ([4df613d](https://github.com/rajarshigit2441139/full-stack_chatApp/commit/4df613d5f0384c839f48635e2a6a9c8ad36a3160)), closes [#33](https://github.com/rajarshigit2441139/full-stack_chatApp/issues/33)
+* **ci:** update semantic-version git reff logic ([f18b206](https://github.com/rajarshigit2441139/full-stack_chatApp/commit/f18b206547f2f10cc953da2cf258ccea0dfdf86c)), closes [#32](https://github.com/rajarshigit2441139/full-stack_chatApp/issues/32)
+* **ci:** update semantic-version git reff logic ([aca24af](https://github.com/rajarshigit2441139/full-stack_chatApp/commit/aca24afbf76c86f0c2ecbb70dedc040aeb84aaf4))
+* **ci:** update trigger for semantic version release & add condition to each job ([56fb6ef](https://github.com/rajarshigit2441139/full-stack_chatApp/commit/56fb6ef825b23d3f507bb7495cf5d3f2251049bb)), closes [#23](https://github.com/rajarshigit2441139/full-stack_chatApp/issues/23)
+* replace hardcoded nginx.conf with nginx nginx.conf.template  ([e70abe9](https://github.com/rajarshigit2441139/full-stack_chatApp/commit/e70abe9ee25751618d249e72b84ab80df2ddf258)), closes [#36](https://github.com/rajarshigit2441139/full-stack_chatApp/issues/36)
+* replace harde coded nginx.conf with nginx nginx.conf.template ([ae03876](https://github.com/rajarshigit2441139/full-stack_chatApp/commit/ae03876c52bef8fee3f40a7ec079b18e521a9e2a))
+
 # 1.0.0-rc.1 (2026-05-10)
 
 
