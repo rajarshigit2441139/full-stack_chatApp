@@ -1,3 +1,11 @@
+# [1.0.0-rc.3](https://github.com/rajarshigit2441139/full-stack_chatApp/compare/frontend-v1.0.0-rc.2...frontend-v1.0.0-rc.3) (2026-05-12)
+
+
+### Bug Fixes
+
+* **docker:** remove envsubst config. Update nginx image tag ([a440d83](https://github.com/rajarshigit2441139/full-stack_chatApp/commit/a440d831e837771138f017cbcdc8cf0128b67f22))
+* **docker:** remove envsubst config. Update nginx image tag  ([d4f97db](https://github.com/rajarshigit2441139/full-stack_chatApp/commit/d4f97dbda897b07500178d81703e94d60c5f467a)), closes [#37](https://github.com/rajarshigit2441139/full-stack_chatApp/issues/37)
+
 # [1.0.0-rc.2](https://github.com/rajarshigit2441139/full-stack_chatApp/compare/frontend-v1.0.0-rc.1...frontend-v1.0.0-rc.2) (2026-05-12)
 
 
