@@ -1,0 +1,16 @@
+apiVersion: cilium.io/v2
+kind: CiliumClusterwideNetworkPolicy
+metadata:
+  name: allow-kubelet
+spec:
+  endpointSelector: {}
+  ingress:
+  - fromEntities:
+    - cluster
+  egress:
+  - toEntities:
+    - host
+  - toEntities:
+    - kube-apiserver 
+  - toEntities:
+    - cluster 

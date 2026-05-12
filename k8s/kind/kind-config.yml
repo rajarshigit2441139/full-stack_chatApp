@@ -1,0 +1,64 @@
+kind: Cluster
+apiVersion: kind.x-k8s.io/v1alpha4
+name: chat-app-staging
+networking:
+  # Disable kindnet (default CNI) - NO pod-to-pod networking initially
+  disableDefaultCNI: true
+  kubeProxyMode: "none"
+  podSubnet: "192.168.0.0/16" 
+nodes:
+- role: control-plane
+  extraPortMappings:
+  # Frontend
+  - containerPort: 80
+    hostPort: 8080
+    listenAddress: "127.0.0.1"
+    protocol: TCP
+
+  # Grafana
+  - containerPort: 30000
+    hostPort: 3001
+    listenAddress: "127.0.0.1"
+    protocol: TCP
+
+  # Prometheus
+  - containerPort: 30900
+    hostPort: 9091
+    listenAddress: "127.0.0.1"
+    protocol: TCP
+
+
+- role: worker  # Frontend worker
+  kubeadmConfigPatches:
+  - |
+    kind: JoinConfiguration
+    nodeRegistration:
+      kubeletExtraArgs:
+        register-with-taints: "app=frontend:NoSchedule"
+        node-labels: "app=frontend"
+        
+- role: worker  # Backend worker
+  kubeadmConfigPatches:
+  - |
+    kind: JoinConfiguration
+    nodeRegistration:
+      kubeletExtraArgs:
+        register-with-taints: "app=backend:NoSchedule"
+        node-labels: "app=backend"
+- role: worker  # DB worker
+  kubeadmConfigPatches:
+  - |
+    kind: JoinConfiguration
+    nodeRegistration:
+      kubeletExtraArgs:
+        register-with-taints: "app=db:NoSchedule"
+        node-labels: "app=db"
+
+- role: worker  # observability worker
+  kubeadmConfigPatches:
+  - |
+    kind: JoinConfiguration
+    nodeRegistration:
+      kubeletExtraArgs:
+        register-with-taints: "app=monitoring:NoSchedule"
+        node-labels: "app=monitoring"
