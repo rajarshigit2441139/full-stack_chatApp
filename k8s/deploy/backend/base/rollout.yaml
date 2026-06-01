@@ -1,0 +1,54 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Rollout
+metadata:
+  name: backend
+  labels:
+    app: backend
+    stage: staging
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: backend
+  strategy:
+    blueGreen:
+      autoPromotionEnabled: true
+      autoPromotionSeconds: 30
+      activeService: backend-svc
+      previewService: backend-preview-svc
+  template:
+    metadata:
+      labels:
+        app: backend
+        stage: staging
+    spec:
+      tolerations:
+        - key: "app"
+          operator: "Equal"
+          value: "backend"
+          effect: "NoSchedule"
+      containers:
+      - name: backend
+        image: ghcr.io/rajarshigit2441139/chatapp/backend-arm64:1.0.1-rc.1
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 5001
+        env:
+        - name: MONGODB_URI
+          value: "mongodb://root:admin@mongodb-svc.db.svc.cluster.local:27017/chatApp?replicaSet=mongodb&authSource=admin"
+        - name: PORT
+          value: "5001"
+        - name: NODE_ENV
+          value: "production"
+        - name: JWT_SECRET
+          valueFrom:
+            secretKeyRef:
+              name: backend-secrets
+              key: jwt-secret
+        resources:
+          limits:
+            memory: "512Mi"
+            cpu: "500m"
+          requests:
+            memory: "256Mi"
+            cpu: "250m"

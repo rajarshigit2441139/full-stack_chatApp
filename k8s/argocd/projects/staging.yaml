@@ -1,0 +1,23 @@
+apiVersion: argoproj.io/v1alpha1
+kind: AppProject
+metadata:
+  name: staging
+  namespace: argocd
+
+spec:
+  sourceRepos:
+    - 'https://github.com/rajarshigit2441139/full-stack_chatApp'
+
+  destinations:
+    - namespace: front
+      server: https://kubernetes.default.svc
+
+    - namespace: back
+      server: https://kubernetes.default.svc
+
+    - namespace: db
+      server: https://kubernetes.default.svc
+
+  clusterResourceWhitelist:
+    - group: '*'
+      kind: '*'

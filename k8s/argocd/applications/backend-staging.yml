@@ -1,0 +1,22 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+
+metadata:
+  name: backend
+
+spec:
+  project: staging
+
+  source:
+    repoURL: https://github.com/rajarshigit2441139/full-stack_chatApp.git
+    targetRevision: k8s
+    path: k8s/deploy/backend/overlays/staging
+
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: back
+
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true

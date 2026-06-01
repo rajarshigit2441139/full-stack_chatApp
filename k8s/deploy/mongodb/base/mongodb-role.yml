@@ -1,0 +1,28 @@
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+
+metadata:
+  name: mongodb-database-role
+  namespace: db
+
+rules:
+  - apiGroups: [""]
+    resources:
+      - secrets
+      - configmaps
+      - pods
+      - services
+    verbs:
+      - get
+      - list
+      - watch
+      - patch
+      - update
+
+  - apiGroups: [""]
+    resources:
+      - pods/status
+    verbs:
+      - get
+      - patch
+      - update

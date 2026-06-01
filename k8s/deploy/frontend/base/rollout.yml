@@ -1,0 +1,61 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Rollout
+metadata:
+  labels:
+    app: frontend
+    level: stage
+  name: chat-app-frontend
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: frontend
+  strategy:
+    blueGreen:
+      autoPromotionEnabled: true
+      autoPromotionSeconds: 30
+      activeService: frontend-svc
+      previewService: frontend-preview-svc
+  template:
+    metadata:
+      labels:
+        app: frontend
+        level: stage
+    spec:
+      tolerations:
+        - key: "app"
+          operator: "Equal"
+          value: "frontend"
+          effect: "NoSchedule"
+      containers:
+      - image: ghcr.io/rajarshigit2441139/chatapp/frontend-arm64:1.0.0-rc.3
+        name: chat-app-frontend
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 80
+        env:
+        - name: NODE_ENV
+          value: "production"
+        - name: BACKEND_URL
+          value: "http://backend-svc.back.svc.cluster.local:5001"
+        readinessProbe:
+          httpGet:
+            path: /
+            port: 80
+          initialDelaySeconds: 30
+          periodSeconds: 10
+          failureThreshold: 3
+        livenessProbe:
+          httpGet:
+            path: /
+            port: 80
+          initialDelaySeconds: 20
+          periodSeconds: 15
+        resources: 
+          requests:
+            memory: "128Mi"
+            cpu: "100m"
+          limits: 
+            memory: "256Mi"
+            cpu: "200m"
+
