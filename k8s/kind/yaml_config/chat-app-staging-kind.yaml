@@ -2,17 +2,24 @@ kind: Cluster
 apiVersion: kind.x-k8s.io/v1alpha4
 name: chat-app-staging
 networking:
-  # Disable kindnet (default CNI) - NO pod-to-pod networking initially
-  disableDefaultCNI: true
-  kubeProxyMode: "none"
+  disableDefaultCNI: true  # Disable kindnet (default CNI) - NO pod-to-pod networking initially
   podSubnet: "192.168.0.0/16" 
 nodes:
 - role: control-plane
   extraPortMappings:
   # Frontend
-  - containerPort: 80
+  - containerPort: 30080
+    hostPort: 80
+    protocol: TCP
+  
+  #backend
+  - containerPort: 30443
+    hostPort: 443
+    protocol: TCP
+
+  # ArgoCD
+  - containerPort: 30081
     hostPort: 8080
-    listenAddress: "127.0.0.1"
     protocol: TCP
 
   # Grafana
@@ -27,8 +34,8 @@ nodes:
     listenAddress: "127.0.0.1"
     protocol: TCP
 
-
-- role: worker  # Frontend worker
+# Frontend worker
+- role: worker  
   kubeadmConfigPatches:
   - |
     kind: JoinConfiguration
@@ -36,8 +43,9 @@ nodes:
       kubeletExtraArgs:
         register-with-taints: "app=frontend:NoSchedule"
         node-labels: "app=frontend"
-        
-- role: worker  # Backend worker
+
+# Backend worker
+- role: worker  
   kubeadmConfigPatches:
   - |
     kind: JoinConfiguration
@@ -45,7 +53,9 @@ nodes:
       kubeletExtraArgs:
         register-with-taints: "app=backend:NoSchedule"
         node-labels: "app=backend"
-- role: worker  # DB worker
+
+# DB worker
+- role: worker  
   kubeadmConfigPatches:
   - |
     kind: JoinConfiguration
@@ -54,7 +64,8 @@ nodes:
         register-with-taints: "app=db:NoSchedule"
         node-labels: "app=db"
 
-- role: worker  # observability worker
+# observability worker
+- role: worker  
   kubeadmConfigPatches:
   - |
     kind: JoinConfiguration

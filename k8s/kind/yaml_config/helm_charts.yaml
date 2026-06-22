@@ -1,0 +1,35 @@
+ingress-nginx:
+  name: ingress-nginx
+  url: https://kubernetes.github.io/ingress-nginx
+  namespace: ingress-nginx
+  release: ingress-nginx
+  chart: ingress-nginx/ingress-nginx
+  createNamespace: true
+  valuesFile: yaml_config/patch-ingress.yaml
+
+argorollout:
+  name: argo
+  url: https://argoproj.github.io/argo-helm
+  namespace: argo-rollouts
+  release: argo-rollouts
+  chart: argo/argo-rollouts
+  createNamespace: true
+  valuesFile: yaml_config/patch-argo-rollout.yaml
+
+argocd:
+  name: argo
+  url: https://argoproj.github.io/argo-helm
+  namespace: argocd
+  release: argocd
+  chart: argo/argo-cd
+  createNamespace: true
+  valuesFile: yaml_config/patch-argocd.yaml
+
+# prometheus:
+#   name: prometheus-community
+#   url: https://prometheus-community.github.io/helm-charts
+#   namespace: monitoring
+#   release: monitoring
+#   chart: prometheus-community/kube-prometheus-stack
+#   createNamespace: true
+#   valuesFile: yaml_config/patch-observability.yaml

@@ -1,0 +1,60 @@
+grafana:
+  service:
+    type: NodePort
+    nodePort: 30000
+
+  nodeSelector:
+    app: monitoring
+
+  tolerations:
+    - key: app
+      value: monitoring
+      operator: Equal
+
+prometheus:
+  service:
+    type: NodePort
+    nodePort: 30900
+
+  prometheusSpec:
+    nodeSelector:
+      app: monitoring
+
+    tolerations:
+      - key: app
+        value: monitoring
+        operator: Equal
+
+alertmanager:
+  alertmanagerSpec:
+    nodeSelector:
+      app: monitoring
+
+    tolerations:
+      - key: app
+        value: monitoring
+        operator: Equal
+
+prometheusOperator:
+  tolerations:
+    - operator: Exists
+
+  admissionWebhooks:
+    patch:
+      tolerations:
+        - operator: Exists
+
+    create:
+      tolerations:
+        - operator: Exists
+
+kube-state-metrics:
+  rbac:
+    create: true
+
+  tolerations:
+    - operator: Exists
+
+prometheus-node-exporter:
+  tolerations:
+    - operator: Exists

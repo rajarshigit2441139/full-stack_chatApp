@@ -7,10 +7,13 @@ spec:
   ingress:
   - fromEntities:
     - cluster
+    - world
+    - remote-node
+    - host
   egress:
   - toEntities:
     - host
-  - toEntities:
     - kube-apiserver 
-  - toEntities:
-    - cluster 
+    - cluster
+    - remote-node
+    - world
