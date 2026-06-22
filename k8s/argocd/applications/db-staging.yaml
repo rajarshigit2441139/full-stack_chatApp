@@ -3,6 +3,7 @@ kind: Application
 
 metadata:
   name: mongodb
+  namespace: argocd
 
 spec:
   project: staging
