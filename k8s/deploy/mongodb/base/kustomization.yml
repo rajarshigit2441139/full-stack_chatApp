@@ -1,6 +1,0 @@
-  resources:
-  - secret.yml
-  - mongodb.yml
-  - mongodb-database-sa.yml
-  - mongodb-role.yml
-  - mongodb-rolebinding.yml

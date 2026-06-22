@@ -1,0 +1,6 @@
+  resources:
+  - secret.yaml
+  - mongodb.yaml
+  - mongodb-database-sa.yaml
+  - mongodb-role.yaml
+  - mongodb-rolebinding.yaml
