@@ -23,5 +23,11 @@ dist-ssr
 *.sln
 *.sw?
 .env
+
+package-lock.json
+package.json
 coverage/
-old_frontend_build_push_image.yml
+k8s/todo*
+tmp/
+coverage/
+
