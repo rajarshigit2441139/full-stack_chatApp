@@ -14,6 +14,22 @@
 * replace hardcoded nginx.conf with nginx nginx.conf.template  ([e70abe9](https://github.com/rajarshigit2441139/full-stack_chatApp/commit/e70abe9ee25751618d249e72b84ab80df2ddf258)), closes [#36](https://github.com/rajarshigit2441139/full-stack_chatApp/issues/36)
 * replace harde coded nginx.conf with nginx nginx.conf.template ([ae03876](https://github.com/rajarshigit2441139/full-stack_chatApp/commit/ae03876c52bef8fee3f40a7ec079b18e521a9e2a))
 
+## [1.0.1-rc.1](https://github.com/rajarshigit2441139/full-stack_chatApp/compare/backend-v1.0.0...backend-v1.0.1-rc.1) (2026-06-23)
+
+
+### Bug Fixes
+
+* **ci:** Update frontend ci ([43bdb51](https://github.com/rajarshigit2441139/full-stack_chatApp/commit/43bdb51c8725878ad7497e7dcd622c2f318583b9)), closes [#30](https://github.com/rajarshigit2441139/full-stack_chatApp/issues/30)
+* **ci:** Update frontend CI ([a929933](https://github.com/rajarshigit2441139/full-stack_chatApp/commit/a9299330af4e464624bfd1be03697b4d8b99ffd8)), closes [#31](https://github.com/rajarshigit2441139/full-stack_chatApp/issues/31)
+* **CI:** Update frontend ci ([634e7a5](https://github.com/rajarshigit2441139/full-stack_chatApp/commit/634e7a50b6ad212d8fe4d598d5e115f820f3ba93))
+* **ci:** update semantic-version git reff logic ([4df613d](https://github.com/rajarshigit2441139/full-stack_chatApp/commit/4df613d5f0384c839f48635e2a6a9c8ad36a3160)), closes [#33](https://github.com/rajarshigit2441139/full-stack_chatApp/issues/33)
+* **ci:** update semantic-version git reff logic ([f18b206](https://github.com/rajarshigit2441139/full-stack_chatApp/commit/f18b206547f2f10cc953da2cf258ccea0dfdf86c)), closes [#32](https://github.com/rajarshigit2441139/full-stack_chatApp/issues/32)
+* **ci:** update semantic-version git reff logic ([aca24af](https://github.com/rajarshigit2441139/full-stack_chatApp/commit/aca24afbf76c86f0c2ecbb70dedc040aeb84aaf4))
+* **docker:** remove envsubst config. Update nginx image tag ([a440d83](https://github.com/rajarshigit2441139/full-stack_chatApp/commit/a440d831e837771138f017cbcdc8cf0128b67f22))
+* **docker:** remove envsubst config. Update nginx image tag  ([d4f97db](https://github.com/rajarshigit2441139/full-stack_chatApp/commit/d4f97dbda897b07500178d81703e94d60c5f467a)), closes [#37](https://github.com/rajarshigit2441139/full-stack_chatApp/issues/37)
+* replace hardcoded nginx.conf with nginx nginx.conf.template  ([e70abe9](https://github.com/rajarshigit2441139/full-stack_chatApp/commit/e70abe9ee25751618d249e72b84ab80df2ddf258)), closes [#36](https://github.com/rajarshigit2441139/full-stack_chatApp/issues/36)
+* replace harde coded nginx.conf with nginx nginx.conf.template ([ae03876](https://github.com/rajarshigit2441139/full-stack_chatApp/commit/ae03876c52bef8fee3f40a7ec079b18e521a9e2a))
+
 ## [1.0.1-rc.1](https://github.com/rajarshigit2441139/full-stack_chatApp/compare/backend-v1.0.0...backend-v1.0.1-rc.1) (2026-05-10)
 
 
