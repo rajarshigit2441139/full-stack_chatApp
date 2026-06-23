@@ -1,3 +1,10 @@
+# [1.0.0-rc.4](https://github.com/rajarshigit2441139/full-stack_chatApp/compare/frontend-v1.0.0-rc.3...frontend-v1.0.0-rc.4) (2026-06-23)
+
+
+### Features
+
+* Change Application name [Chatty > ChatON]. ([0d72fdb](https://github.com/rajarshigit2441139/full-stack_chatApp/commit/0d72fdbd755834878a7a99aa4cba159b757146d5))
+
 # [1.0.0-rc.3](https://github.com/rajarshigit2441139/full-stack_chatApp/compare/frontend-v1.0.0-rc.2...frontend-v1.0.0-rc.3) (2026-05-12)
 
 
