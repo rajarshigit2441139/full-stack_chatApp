@@ -1,8 +1,6 @@
 services:
   frontend:
-    build:
-      context: ./frontend
-      dockerfile: Dockerfile
+    image: ghcr.io/rajarshigit2441139/chatapp/frontend-arm64:1.0.0-rc.3
     ports:
       - "8081:80"
     depends_on:
@@ -14,11 +12,9 @@ services:
     restart: unless-stopped
 
   backend:
-    build:
-      context: ./backend
-      dockerfile: Dockerfile
+    image: ghcr.io/rajarshigit2441139/chatapp/backend-arm64:1.0.1-rc.1
     ports:
-      - "5001:5001"
+      - "5002:5001"
     depends_on:
       - mongo
     env_file:
