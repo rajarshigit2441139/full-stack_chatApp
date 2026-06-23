@@ -25,7 +25,11 @@ jobs:
       packages: write 
     strategy:
       matrix:
-        arch: [arm64]
+        include:
+        - arch: arm64
+          dockerfile: ./backend/Dockerfile
+        - arch: amd64
+          dockerfile: ./backend/Dockerfile.amd64
     steps:
       - name: Code Check 
         id: checkout
@@ -56,7 +60,7 @@ jobs:
           version:  ${{ steps.normalize.outputs.clean_version }}
           arch: ${{ matrix.arch }}
           context: ./backend
-          dockerfile: ./backend/Dockerfile
+          dockerfile: ${{ matrix.dockerfile }}
           tag_prefix: ghcr.io/rajarshigit2441139/chatapp/backend
           push: "true"
           github_token: ${{ secrets.GITHUB_TOKEN }}
