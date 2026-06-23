@@ -8,7 +8,7 @@ COPY . .
 RUN npm install --omit=dev && npm cache clean --force
 
 # Stage 2: Runtime
-FROM ghcr.io/rajarshigit2441139/base_images/node-18.16.0-arm64:20
+FROM ghcr.io/rajarshigit2441139/base_images/node-18.16.0-amd64:20
 
 # (Inherits WORKDIR and USER from runtime)
 COPY --from=builder /app /usr/src/node_app
