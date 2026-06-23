@@ -8,7 +8,9 @@ COPY . .
 RUN npm run build
 
 # Production stage
-FROM ghcr.io/rajarshigit2441139/base_images/nginx-1.29-arm64:11
+
+FROM ghcr.io/rajarshigit2441139/base_images/nginx-1.29-arm64:15
+
 
 COPY --from=build /app/dist /usr/share/nginx/html
 
