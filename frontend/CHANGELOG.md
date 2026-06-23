@@ -1,3 +1,10 @@
+# [1.0.0-rc.5](https://github.com/rajarshigit2441139/full-stack_chatApp/compare/frontend-v1.0.0-rc.4...frontend-v1.0.0-rc.5) (2026-06-23)
+
+
+### Bug Fixes
+
+* frontend/Dockerfile.amd64 typo ([904f96e](https://github.com/rajarshigit2441139/full-stack_chatApp/commit/904f96efdaec8ec0debaa5041c8e013c28aad148))
+
 # [1.0.0-rc.4](https://github.com/rajarshigit2441139/full-stack_chatApp/compare/frontend-v1.0.0-rc.3...frontend-v1.0.0-rc.4) (2026-06-23)
 
 
