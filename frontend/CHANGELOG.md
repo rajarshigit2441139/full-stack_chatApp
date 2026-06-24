@@ -1,3 +1,15 @@
+# [1.0.0-rc.6](https://github.com/rajarshigit2441139/full-stack_chatApp/compare/frontend-v1.0.0-rc.5...frontend-v1.0.0-rc.6) (2026-06-24)
+
+
+### Bug Fixes
+
+* update  package.json & package-lock.json for frontend application name change ([864cb41](https://github.com/rajarshigit2441139/full-stack_chatApp/commit/864cb419763038c8753848f490eecc5debe3943e))
+
+
+### Features
+
+* update src/components/NoChatSelected.jsx fpr wellcome message ([19f2671](https://github.com/rajarshigit2441139/full-stack_chatApp/commit/19f267140251b0df8ffba2daf00955a2bd7c9c12))
+
 # [1.0.0-rc.5](https://github.com/rajarshigit2441139/full-stack_chatApp/compare/frontend-v1.0.0-rc.4...frontend-v1.0.0-rc.5) (2026-06-23)
 
 
