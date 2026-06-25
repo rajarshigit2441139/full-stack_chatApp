@@ -9,10 +9,10 @@ spec:
   ingressClassName: nginx
   tls:
   - hosts:
-    - chat.operation.com
+    - preview.chat.operation.com
     secretName: chat-frontend-tls-secret
   rules:
-  - host: "chat.operation.com" 
+  - host: "preview.chat.operation.com" 
     http:
       paths:
       - path: /
@@ -22,5 +22,3 @@ spec:
             name: frontend-preview-svc
             port:
               number: 80
-
-      
