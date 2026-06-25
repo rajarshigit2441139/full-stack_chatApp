@@ -5,4 +5,5 @@ resources:
 - service.yaml
 - preview-service.yaml
 - ingress.yaml
+- preview-ingress.yaml
 - chat-tls-secret.yaml
