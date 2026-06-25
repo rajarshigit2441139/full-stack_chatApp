@@ -2,3 +2,7 @@ resources:
   - ../../base
 
 namespace: back
+
+images:
+  - name: ghcr.io/rajarshigit2441139/chatapp/backend-arm64
+    newTag: 1.0.1-rc.1

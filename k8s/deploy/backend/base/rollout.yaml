@@ -29,7 +29,7 @@ spec:
           effect: "NoSchedule"
       containers:
       - name: backend
-        image: ghcr.io/rajarshigit2441139/chatapp/backend-arm64:1.0.1-rc.1
+        image: ghcr.io/rajarshigit2441139/chatapp/backend-arm64:1.0.1-rc.0
         imagePullPolicy: Always
         ports:
         - containerPort: 5001
