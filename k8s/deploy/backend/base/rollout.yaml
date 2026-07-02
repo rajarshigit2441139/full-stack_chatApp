@@ -10,12 +10,6 @@ spec:
   selector:
     matchLabels:
       app: backend
-  strategy:
-    blueGreen:
-      autoPromotionEnabled: true
-      autoPromotionSeconds: 30
-      activeService: backend-svc
-      previewService: backend-preview-svc
   template:
     metadata:
       labels:

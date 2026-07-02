@@ -1,0 +1,18 @@
+resources:
+  - ../../base
+
+namespace: front
+
+patches: 
+  - path: prod-strategy.yaml
+  - target:
+         kind: Rollout
+         name: chat-app-frontend
+    patch: |-
+      - op: replace
+        path: /spec/replicas
+        value: 5
+
+images:
+  - name: ghcr.io/rajarshigit2441139/chatapp/frontend-arm64
+    newTag: 1.0.0-rc.3

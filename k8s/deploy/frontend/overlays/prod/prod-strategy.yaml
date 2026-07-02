@@ -1,0 +1,25 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Rollout
+metadata:
+  name: chat-app-frontend
+spec:
+  strategy:
+    canary:
+      stableService: frontend-svc
+      canaryService: frontend-preview-svc
+
+      trafficRouting:
+        nginx:
+          stableIngress: frontend-ingress
+      steps:
+        - setWeight: 20
+        - pause:
+            duration: 30s
+        - setWeight: 40
+        - pause:
+            duration: 30s
+        - setWeight: 60
+        - pause: {}
+        - setWeight: 80
+        - pause: {}
+        - setWeight: 100

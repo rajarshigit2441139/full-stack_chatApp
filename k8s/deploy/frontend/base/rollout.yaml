@@ -10,12 +10,12 @@ spec:
   selector:
     matchLabels:
       app: frontend
-  strategy:
-    blueGreen:
-      autoPromotionEnabled: true
-      autoPromotionSeconds: 30
-      activeService: frontend-svc
-      previewService: frontend-preview-svc
+  # strategy:
+  #   blueGreen:
+  #     autoPromotionEnabled: true
+  #     autoPromotionSeconds: 30
+  #     activeService: frontend-svc
+  #     previewService: frontend-preview-svc
   template:
     metadata:
       labels:

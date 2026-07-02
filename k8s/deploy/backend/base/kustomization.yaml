@@ -5,6 +5,5 @@ resources:
 - backend-service.yaml
 - backend-preview-service.yaml
 - backend-ingress.yaml
-- backend-preview-ingress.yaml
 - backend-tls-secret.yaml
 - backend-secrets.yaml
