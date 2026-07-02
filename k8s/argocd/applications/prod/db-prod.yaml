@@ -1,0 +1,23 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+
+metadata:
+  name: mongodb
+  namespace: argocd
+
+spec:
+  project: prod
+
+  source:
+    repoURL: https://github.com/rajarshigit2441139/full-stack_chatApp.git
+    targetRevision: k8s
+    path: k8s/deploy/mongodb/overlays/prod
+
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: db
+
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
