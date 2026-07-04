@@ -5,7 +5,7 @@ namespace: back
 
 patches:
   - path: stage-backend-strategy.yaml
-  
+
 images:
-  - name: ghcr.io/rajarshigit2441139/chatapp/backend-arm64
+  - name: ghcr.io/rajarshigit2441139/chatapp/backend-amd4
     newTag: 1.0.1-rc.1
