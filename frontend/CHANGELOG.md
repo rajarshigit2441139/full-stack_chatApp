@@ -1,3 +1,10 @@
+# [1.0.0-rc.7](https://github.com/rajarshigit2441139/full-stack_chatApp/compare/frontend-v1.0.0-rc.6...frontend-v1.0.0-rc.7) (2026-07-06)
+
+
+### Bug Fixes
+
+* using nginx.conf.template instead of nginx.conf in Dockerfile.amd64 ([4604808](https://github.com/rajarshigit2441139/full-stack_chatApp/commit/46048087dd69a6744748e068d7ad9e5c1103d3d0))
+
 # [1.0.0-rc.6](https://github.com/rajarshigit2441139/full-stack_chatApp/compare/frontend-v1.0.0-rc.5...frontend-v1.0.0-rc.6) (2026-06-24)
 
 
