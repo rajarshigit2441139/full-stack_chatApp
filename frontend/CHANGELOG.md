@@ -1,3 +1,11 @@
+# [1.0.0-rc.8](https://github.com/rajarshigit2441139/full-stack_chatApp/compare/frontend-v1.0.0-rc.7...frontend-v1.0.0-rc.8) (2026-07-07)
+
+
+### Features
+
+* Update Allpication name ([ee7fc09](https://github.com/rajarshigit2441139/full-stack_chatApp/commit/ee7fc093d912b2566979a9a74d5e2dde25d4bcd6))
+* Update the welcome message ([0325706](https://github.com/rajarshigit2441139/full-stack_chatApp/commit/03257061cb15e0095af230f87c9b2524f67bc373))
+
 # [1.0.0-rc.7](https://github.com/rajarshigit2441139/full-stack_chatApp/compare/frontend-v1.0.0-rc.6...frontend-v1.0.0-rc.7) (2026-07-06)
 
 
