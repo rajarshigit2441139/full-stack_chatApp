@@ -1,3 +1,10 @@
+# [1.0.0-rc.9](https://github.com/rajarshigit2441139/full-stack_chatApp/compare/frontend-v1.0.0-rc.8...frontend-v1.0.0-rc.9) (2026-07-07)
+
+
+### Bug Fixes
+
+* update package*.json ([7c884af](https://github.com/rajarshigit2441139/full-stack_chatApp/commit/7c884afac6ff63784b0b21c7d995ec2c01023f28))
+
 # [1.0.0-rc.8](https://github.com/rajarshigit2441139/full-stack_chatApp/compare/frontend-v1.0.0-rc.7...frontend-v1.0.0-rc.8) (2026-07-07)
 
 
