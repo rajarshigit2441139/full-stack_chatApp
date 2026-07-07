@@ -6,7 +6,7 @@ namespace: front
 images:
   - name: ghcr.io/rajarshigit2441139/chatapp/frontend-arm64
     newName: ghcr.io/rajarshigit2441139/chatapp/frontend-amd64
-    newTag: 1.0.0-rc.6
+    newTag: 1.0.0-rc.7
 
 patches: 
   - path: stage-strategy.yaml
