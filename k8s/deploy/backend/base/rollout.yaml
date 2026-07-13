@@ -26,7 +26,8 @@ spec:
         image: ghcr.io/rajarshigit2441139/chatapp/backend-arm64:1.0.1-rc.0
         imagePullPolicy: Always
         ports:
-        - containerPort: 5001
+          - name: http
+            containerPort: 5001
         env:
         - name: MONGODB_URI
           value: "mongodb://root:admin@mongodb-svc.db.svc.cluster.local:27017/chatApp?replicaSet=mongodb&authSource=admin"
