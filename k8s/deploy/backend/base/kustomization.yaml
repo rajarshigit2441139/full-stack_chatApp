@@ -7,3 +7,4 @@ resources:
 - backend-ingress.yaml
 - backend-tls-secret.yaml
 - backend-secrets.yaml
+- backend-servicemonitor.yaml
