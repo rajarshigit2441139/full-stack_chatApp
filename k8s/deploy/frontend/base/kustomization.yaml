@@ -6,3 +6,4 @@ resources:
 - preview-service.yaml
 - ingress.yaml
 - chat-tls-secret.yaml
+- servicemonitor.yaml
