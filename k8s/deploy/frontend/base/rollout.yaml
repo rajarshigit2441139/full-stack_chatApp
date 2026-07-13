@@ -10,12 +10,6 @@ spec:
   selector:
     matchLabels:
       app: frontend
-  # strategy:
-  #   blueGreen:
-  #     autoPromotionEnabled: true
-  #     autoPromotionSeconds: 30
-  #     activeService: frontend-svc
-  #     previewService: frontend-preview-svc
   template:
     metadata:
       labels:
@@ -32,7 +26,8 @@ spec:
         name: chat-app-frontend
         imagePullPolicy: Always
         ports:
-        - containerPort: 80
+          - name: http
+            containerPort: 80
         env:
         - name: NODE_ENV
           value: "production"
@@ -58,4 +53,12 @@ spec:
           limits: 
             memory: "256Mi"
             cpu: "200m"
+
+      - name: nginx-prometheus-exporter
+        image: nginx/nginx-prometheus-exporter:1.4.2
+        args:
+           - -nginx.scrape-uri=http://127.0.0.1/nginx_status
+        ports:
+          - name: metrics
+            containerPort: 9113
 
