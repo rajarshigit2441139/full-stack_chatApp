@@ -1,0 +1,26 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+namespace: monitoring
+
+generatorOptions:
+  disableNameSuffixHash: true
+  labels:
+    grafana_dashboard: "1"
+
+configMapGenerator:
+  - name: grafana-dashboard-cluster-overview
+    files:
+      - dashboards/cluster-overview.json
+
+  # - name: grafana-dashboard-backend
+  #   files:
+  #     - dashboards/backend.json
+
+  # - name: grafana-dashboard-frontend
+  #   files:
+  #     - dashboards/frontend.json
+
+  # - name: grafana-dashboard-mongodb
+  #   files:
+  #     - dashboards/mongodb.json
