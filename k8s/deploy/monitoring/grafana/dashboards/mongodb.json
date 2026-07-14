@@ -36,7 +36,7 @@
             "uid": "${DS_PROMETHEUS}"
           },
           "editorMode": "code",
-          "expr": "max(mongodb_up{instance=~\"$instance\"})",
+          "expr": "max(up{job=\"mongodb-exporter\",instance=~\"$instance\"})",
           "legendFormat": "MongoDB Up",
           "range": true,
           "refId": "A"
@@ -87,7 +87,7 @@
             "uid": "${DS_PROMETHEUS}"
           },
           "editorMode": "code",
-          "expr": "sum(mongodb_ss_connections_current{instance=~\"$instance\"})",
+          "expr": "sum(mongodb_connections{instance=~\"$instance\"})",
           "legendFormat": "Current Connections",
           "range": true,
           "refId": "A"
@@ -138,7 +138,7 @@
             "uid": "${DS_PROMETHEUS}"
           },
           "editorMode": "code",
-          "expr": "sum(mongodb_ss_mem_resident{instance=~\"$instance\"}) * 1024 * 1024",
+          "expr": "sum(mongodb_memory{instance=~\"$instance\"})",
           "legendFormat": "Resident Memory",
           "range": true,
           "refId": "A"
@@ -189,7 +189,7 @@
             "uid": "${DS_PROMETHEUS}"
           },
           "editorMode": "code",
-          "expr": "sum(mongodb_ss_mem_virtual{instance=~\"$instance\"}) * 1024 * 1024",
+          "expr": "sum(mongodb_memory{instance=~\"$instance\"})",
           "legendFormat": "Virtual Memory",
           "range": true,
           "refId": "A"
@@ -240,7 +240,7 @@
             "uid": "${DS_PROMETHEUS}"
           },
           "editorMode": "code",
-          "expr": "max(mongodb_votingMembersCount{instance=~\"$instance\"})",
+          "expr": "max(mongodb_rs_votingMembersCount{instance=~\"$instance\"})",
           "legendFormat": "Voting Members",
           "range": true,
           "refId": "A"
@@ -291,7 +291,7 @@
             "uid": "${DS_PROMETHEUS}"
           },
           "editorMode": "code",
-          "expr": "max(mongodb_writableVotingMembersCount{instance=~\"$instance\"})",
+          "expr": "max(mongodb_rs_writableVotingMembersCount{instance=~\"$instance\"})",
           "legendFormat": "Writable Members",
           "range": true,
           "refId": "A"
@@ -342,65 +342,10 @@
             "uid": "${DS_PROMETHEUS}"
           },
           "editorMode": "code",
-          "expr": "sum(rate(mongodb_ss_opcounters_insert{instance=~\"$instance\"}[$__rate_interval]))",
-          "legendFormat": "insert",
+          "expr": "sum by (type) (rate(mongodb_op_counters_total{instance=~\"$instance\"}[$__rate_interval]))",
+          "legendFormat": "{{type}}",
           "range": true,
           "refId": "A"
-        },
-        {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "${DS_PROMETHEUS}"
-          },
-          "editorMode": "code",
-          "expr": "sum(rate(mongodb_ss_opcounters_query{instance=~\"$instance\"}[$__rate_interval]))",
-          "legendFormat": "query",
-          "range": true,
-          "refId": "B"
-        },
-        {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "${DS_PROMETHEUS}"
-          },
-          "editorMode": "code",
-          "expr": "sum(rate(mongodb_ss_opcounters_update{instance=~\"$instance\"}[$__rate_interval]))",
-          "legendFormat": "update",
-          "range": true,
-          "refId": "C"
-        },
-        {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "${DS_PROMETHEUS}"
-          },
-          "editorMode": "code",
-          "expr": "sum(rate(mongodb_ss_opcounters_delete{instance=~\"$instance\"}[$__rate_interval]))",
-          "legendFormat": "delete",
-          "range": true,
-          "refId": "D"
-        },
-        {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "${DS_PROMETHEUS}"
-          },
-          "editorMode": "code",
-          "expr": "sum(rate(mongodb_ss_opcounters_getmore{instance=~\"$instance\"}[$__rate_interval]))",
-          "legendFormat": "getmore",
-          "range": true,
-          "refId": "E"
-        },
-        {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "${DS_PROMETHEUS}"
-          },
-          "editorMode": "code",
-          "expr": "sum(rate(mongodb_ss_opcounters_command{instance=~\"$instance\"}[$__rate_interval]))",
-          "legendFormat": "command",
-          "range": true,
-          "refId": "F"
         }
       ],
       "fieldConfig": {
@@ -445,32 +390,10 @@
             "uid": "${DS_PROMETHEUS}"
           },
           "editorMode": "code",
-          "expr": "sum(mongodb_ss_connections_current{instance=~\"$instance\"})",
-          "legendFormat": "current",
+          "expr": "sum by (type) (mongodb_connections{instance=~\"$instance\"})",
+          "legendFormat": "{{type}}",
           "range": true,
           "refId": "A"
-        },
-        {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "${DS_PROMETHEUS}"
-          },
-          "editorMode": "code",
-          "expr": "sum(mongodb_ss_connections_available{instance=~\"$instance\"})",
-          "legendFormat": "available",
-          "range": true,
-          "refId": "B"
-        },
-        {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "${DS_PROMETHEUS}"
-          },
-          "editorMode": "code",
-          "expr": "sum(mongodb_ss_connections_active{instance=~\"$instance\"})",
-          "legendFormat": "active",
-          "range": true,
-          "refId": "C"
         }
       ],
       "fieldConfig": {
@@ -515,21 +438,10 @@
             "uid": "${DS_PROMETHEUS}"
           },
           "editorMode": "code",
-          "expr": "sum(mongodb_ss_mem_resident{instance=~\"$instance\"}) * 1024 * 1024",
-          "legendFormat": "resident",
+          "expr": "sum by (type) (mongodb_memory{instance=~\"$instance\"})",
+          "legendFormat": "{{type}}",
           "range": true,
           "refId": "A"
-        },
-        {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "${DS_PROMETHEUS}"
-          },
-          "editorMode": "code",
-          "expr": "sum(mongodb_ss_mem_virtual{instance=~\"$instance\"}) * 1024 * 1024",
-          "legendFormat": "virtual",
-          "range": true,
-          "refId": "B"
         }
       ],
       "fieldConfig": {
@@ -574,8 +486,8 @@
             "uid": "${DS_PROMETHEUS}"
           },
           "editorMode": "code",
-          "expr": "sum(mongodb_ss_wt_cache_bytes_currently_in_the_cache{instance=~\"$instance\"})",
-          "legendFormat": "cache",
+          "expr": "sum by (type) (mongodb_mongod_wiredtiger_cache_bytes{instance=~\"$instance\"})",
+          "legendFormat": "{{type}}",
           "range": true,
           "refId": "A"
         },
@@ -585,21 +497,10 @@
             "uid": "${DS_PROMETHEUS}"
           },
           "editorMode": "code",
-          "expr": "sum(mongodb_ss_wt_cache_tracked_dirty_bytes_in_the_cache{instance=~\"$instance\"})",
-          "legendFormat": "dirty",
-          "range": true,
-          "refId": "B"
-        },
-        {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "${DS_PROMETHEUS}"
-          },
-          "editorMode": "code",
-          "expr": "sum(mongodb_ss_wt_cache_maximum_bytes_configured{instance=~\"$instance\"})",
+          "expr": "sum(mongodb_mongod_wiredtiger_cache_max_bytes{instance=~\"$instance\"})",
           "legendFormat": "maximum",
           "range": true,
-          "refId": "C"
+          "refId": "B"
         }
       ],
       "fieldConfig": {
@@ -1049,11 +950,8 @@
           "type": "prometheus",
           "uid": "${DS_PROMETHEUS}"
         },
-        "definition": "label_values(mongodb_up, instance)",
-        "query": {
-          "query": "label_values(mongodb_up, instance)",
-          "refId": "StandardVariableQuery"
-        },
+        "definition": "label_values(up{job=\"mongodb-exporter\"}, instance)",
+        "query": "label_values(up{job=\"mongodb-exporter\"}, instance)",
         "includeAll": true,
         "allValue": ".*",
         "multi": true,
