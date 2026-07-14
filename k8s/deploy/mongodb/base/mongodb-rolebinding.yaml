@@ -3,7 +3,7 @@ kind: RoleBinding
 
 metadata:
   name: mongodb-database-rolebinding
-  namespace: db
+
 
 subjects:
   - kind: ServiceAccount

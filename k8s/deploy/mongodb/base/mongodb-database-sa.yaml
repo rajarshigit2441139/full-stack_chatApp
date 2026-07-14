@@ -3,4 +3,4 @@ kind: ServiceAccount
 
 metadata:
   name: mongodb-database-sa
-  namespace: db
+  # namespace: db

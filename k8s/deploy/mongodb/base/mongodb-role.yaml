@@ -3,7 +3,6 @@ kind: Role
 
 metadata:
   name: mongodb-database-role
-  namespace: db
 
 rules:
   - apiGroups: [""]
