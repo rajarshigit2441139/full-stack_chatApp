@@ -1687,7 +1687,7 @@
   },
   "timezone": "browser",
   "title": "Chat App - MongoDB Overview",
-  "uid": "Chat-App-MongoDB-Overview",
+  "uid": "mongodb-overview-chatapp",
   "version": 1,
   "weekStart": ""
 }
