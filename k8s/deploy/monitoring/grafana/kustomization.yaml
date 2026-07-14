@@ -21,6 +21,6 @@ configMapGenerator:
     files:
       - dashboards/frontend.json
 
-  # - name: grafana-dashboard-mongodb
-  #   files:
-  #     - dashboards/mongodb.json
+  - name: grafana-dashboard-mongodb
+    files:
+      - dashboards/mongodb.json
