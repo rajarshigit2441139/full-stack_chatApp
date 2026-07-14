@@ -25,13 +25,11 @@ nodes:
   # Grafana
   - containerPort: 30000
     hostPort: 3001
-    listenAddress: "127.0.0.1"
     protocol: TCP
 
   # Prometheus
   - containerPort: 30900
     hostPort: 9091
-    listenAddress: "127.0.0.1"
     protocol: TCP
 
 # Frontend worker
