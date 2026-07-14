@@ -1067,7 +1067,7 @@
     "to": "now"
   },
   "timezone": "browser",
-  "title": "MongoDB Overview",
+  "title": "Chat App - MongoDB Overview",
   "uid": "mongodb-overview-chatapp",
   "version": 1
 }
