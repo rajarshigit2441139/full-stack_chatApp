@@ -17,9 +17,9 @@ configMapGenerator:
     files:
       - dashboards/backend.json
 
-  # - name: grafana-dashboard-frontend
-  #   files:
-  #     - dashboards/frontend.json
+  - name: grafana-dashboard-frontend
+    files:
+      - dashboards/frontend.json
 
   # - name: grafana-dashboard-mongodb
   #   files:
