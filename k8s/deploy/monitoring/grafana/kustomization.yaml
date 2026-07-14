@@ -13,9 +13,9 @@ configMapGenerator:
     files:
       - dashboards/cluster-overview.json
 
-  # - name: grafana-dashboard-backend
-  #   files:
-  #     - dashboards/backend.json
+  - name: grafana-dashboard-backend
+    files:
+      - dashboards/backend.json
 
   # - name: grafana-dashboard-frontend
   #   files:
