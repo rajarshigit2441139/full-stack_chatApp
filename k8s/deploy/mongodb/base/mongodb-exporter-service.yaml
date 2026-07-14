@@ -4,3 +4,15 @@ metadata:
   name: mongodb-exporter
   labels:
     app: mongodb-exporter
+
+spec:
+  selector:
+    app: mongodb-exporter
+
+  ports:
+    - name: metrics
+      port: 9216
+      targetPort: metrics
+      protocol: TCP
+
+  type: ClusterIP
