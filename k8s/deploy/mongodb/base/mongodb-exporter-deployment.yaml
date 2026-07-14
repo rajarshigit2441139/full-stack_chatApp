@@ -18,6 +18,11 @@ spec:
         app: mongodb-exporter
 
     spec:
+      tolerations:
+            - key: "app"
+              operator: "Equal"
+              value: "db"
+              effect: "NoSchedule"
       containers:
         - name: mongodb-exporter
           image: percona/mongodb_exporter:0.47.2
