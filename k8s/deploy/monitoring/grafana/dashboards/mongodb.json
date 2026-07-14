@@ -1636,34 +1636,48 @@
     "prometheus"
   ],
   "templating": {
-    "list": [
-      {
-        "allValue": ".*",
-        "current": {
-          "selected": false,
-          "text": "All",
-          "value": "$__all"
-        },
-        "datasource": {
-          "type": "prometheus",
-          "uid": "${DS_PROMETHEUS}"
-        },
-        "definition": "label_values(up{job=\"mongodb-exporter\"}, instance)",
-        "description": "MongoDB exporter instance",
-        "includeAll": true,
-        "label": "MongoDB instance",
-        "multi": true,
-        "name": "instance",
-        "options": [],
-        "query": {
-          "query": "label_values(up{job=\"mongodb-exporter\"}, instance)",
-          "refId": "PrometheusVariableQueryEditor-VariableQuery"
-        },
-        "refresh": 1,
-        "regex": "",
-        "skipUrlSync": false,
-        "sort": 1,
-        "type": "query"
+  "list": [
+    {
+      "current": {},
+      "hide": 0,
+      "includeAll": false,
+      "label": "Prometheus",
+      "multi": false,
+      "name": "DS_PROMETHEUS",
+      "options": [],
+      "query": "prometheus",
+      "refresh": 1,
+      "regex": "",
+      "skipUrlSync": false,
+      "type": "datasource"
+    },
+    {
+      "allValue": ".*",
+      "current": {
+        "selected": false,
+        "text": "All",
+        "value": "$__all"
+      },
+      "datasource": {
+        "type": "prometheus",
+        "uid": "$DS_PROMETHEUS"
+      },
+      "definition": "label_values(up{job=\"mongodb-exporter\"}, instance)",
+      "description": "MongoDB exporter instance",
+      "includeAll": true,
+      "label": "MongoDB instance",
+      "multi": true,
+      "name": "instance",
+      "options": [],
+      "query": {
+        "query": "label_values(up{job=\"mongodb-exporter\"}, instance)",
+        "refId": "PrometheusVariableQueryEditor-VariableQuery"
+      },
+      "refresh": 1,
+      "regex": "",
+      "skipUrlSync": false,
+      "sort": 1,
+      "type": "query"
       }
     ]
   },
