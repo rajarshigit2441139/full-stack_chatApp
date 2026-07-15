@@ -1,0 +1,73 @@
+apiVersion: monitoring.coreos.com/v1
+kind: PrometheusRule
+
+metadata:
+  name: chatapp-cluster-alerts
+  namespace: monitoring
+  labels:
+    release: monitoring
+
+spec:
+  groups:
+    - name: chatapp.cluster.alerts
+      rules:
+
+        - alert: ChatAppClusterHighCPU
+          expr: chatapp:cluster_cpu_usage_percent > 80
+          for: 10m
+          labels:
+            severity: warning
+            component: cluster
+          annotations:
+            summary: "High cluster CPU usage"
+            description: "Cluster CPU usage is {{ $value | printf \"%.2f\" }}% and has been above 80% for 10 minutes."
+
+        - alert: ChatAppClusterCriticalCPU
+          expr: chatapp:cluster_cpu_usage_percent > 95
+          for: 5m
+          labels:
+            severity: critical
+            component: cluster
+          annotations:
+            summary: "Critical cluster CPU usage"
+            description: "Cluster CPU usage is {{ $value | printf \"%.2f\" }}% and has been above 95% for 5 minutes."
+
+        - alert: ChatAppClusterHighMemory
+          expr: chatapp:cluster_memory_usage_percent > 80
+          for: 10m
+          labels:
+            severity: warning
+            component: cluster
+          annotations:
+            summary: "High cluster memory usage"
+            description: "Cluster memory usage is {{ $value | printf \"%.2f\" }}% and has been above 80% for 10 minutes."
+
+        - alert: ChatAppClusterCriticalMemory
+          expr: chatapp:cluster_memory_usage_percent > 95
+          for: 5m
+          labels:
+            severity: critical
+            component: cluster
+          annotations:
+            summary: "Critical cluster memory usage"
+            description: "Cluster memory usage is {{ $value | printf \"%.2f\" }}% and has been above 95% for 5 minutes."
+
+        - alert: ChatAppClusterNodeNotReady
+          expr: chatapp:cluster_nodes_not_ready > 0
+          for: 5m
+          labels:
+            severity: critical
+            component: cluster
+          annotations:
+            summary: "Kubernetes node is not ready"
+            description: "{{ $value }} Kubernetes node(s) have been NotReady for at least 5 minutes."
+
+        - alert: ChatAppClusterFailedPods
+          expr: chatapp:cluster_failed_pods > 0
+          for: 5m
+          labels:
+            severity: warning
+            component: cluster
+          annotations:
+            summary: "Failed pods detected"
+            description: "{{ $value }} pod(s) are currently in the Failed phase."
