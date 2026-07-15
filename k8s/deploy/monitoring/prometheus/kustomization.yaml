@@ -1,0 +1,14 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+resources:
+  # Kubernetes infrastructure
+  - rules/recording/cluster-recording-rules.yaml
+  - rules/recording/node-recording-rules.yaml
+  - rules/recording/workload-recording-rules.yaml
+  - rules/recording/kubernetes-health-recording-rules.yaml
+
+  # Applications
+  - rules/recording/backend-recording-rules.yaml
+  - rules/recording/frontend-recording-rules.yaml
+  - rules/recording/mongodb-recording-rules.yaml

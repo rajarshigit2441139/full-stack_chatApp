@@ -1,0 +1,78 @@
+apiVersion: monitoring.coreos.com/v1
+kind: PrometheusRule
+
+metadata:
+  name: chatapp-workload-recording-rules
+  namespace: monitoring
+  labels:
+    release: monitoring
+
+spec:
+  groups:
+    - name: chatapp.workload
+      interval: 30s
+
+      rules:
+        - record: chatapp:namespace_cpu_usage_cores
+          expr: |
+            sum by (namespace) (
+              rate(
+                container_cpu_usage_seconds_total{
+                  container!="",
+                  container!="POD"
+                }[5m]
+              )
+            )
+
+        - record: chatapp:namespace_memory_usage_bytes
+          expr: |
+            sum by (namespace) (
+              container_memory_working_set_bytes{
+                container!="",
+                container!="POD"
+              }
+            )
+
+        - record: chatapp:pod_cpu_usage_cores
+          expr: |
+            sum by (namespace, pod) (
+              rate(
+                container_cpu_usage_seconds_total{
+                  container!="",
+                  container!="POD"
+                }[5m]
+              )
+            )
+
+        - record: chatapp:pod_memory_usage_bytes
+          expr: |
+            sum by (namespace, pod) (
+              container_memory_working_set_bytes{
+                container!="",
+                container!="POD"
+              }
+            )
+
+        - record: chatapp:pod_container_restarts_1h
+          expr: |
+            sum by (namespace, pod) (
+              increase(
+                kube_pod_container_status_restarts_total[1h]
+              )
+            )
+
+        - record: chatapp:pod_network_receive_bytes_per_second
+          expr: |
+            sum by (namespace, pod) (
+              rate(
+                container_network_receive_bytes_total[5m]
+              )
+            )
+
+        - record: chatapp:pod_network_transmit_bytes_per_second
+          expr: |
+            sum by (namespace, pod) (
+              rate(
+                container_network_transmit_bytes_total[5m]
+              )
+            )

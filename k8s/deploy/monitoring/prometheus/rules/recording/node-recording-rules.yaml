@@ -1,0 +1,95 @@
+apiVersion: monitoring.coreos.com/v1
+kind: PrometheusRule
+
+metadata:
+  name: chatapp-node-recording-rules
+  namespace: monitoring
+  labels:
+    release: monitoring
+
+spec:
+  groups:
+    - name: chatapp.node
+      interval: 30s
+
+      rules:
+        - record: chatapp:node_cpu_usage_percent
+          expr: |
+            100 * (
+              1 -
+              avg by (instance) (
+                rate(
+                  node_cpu_seconds_total{
+                    mode="idle"
+                  }[5m]
+                )
+              )
+            )
+
+        - record: chatapp:node_memory_usage_percent
+          expr: |
+            100 * (
+              1 -
+              (
+                node_memory_MemAvailable_bytes
+                /
+                node_memory_MemTotal_bytes
+              )
+            )
+
+        - record: chatapp:node_filesystem_usage_percent
+          expr: |
+            100 * (
+              1 -
+              (
+                node_filesystem_avail_bytes{
+                  mountpoint="/",
+                  fstype!~"tmpfs|overlay"
+                }
+                /
+                node_filesystem_size_bytes{
+                  mountpoint="/",
+                  fstype!~"tmpfs|overlay"
+                }
+              )
+            )
+
+        - record: chatapp:node_network_receive_bytes_per_second
+          expr: |
+            sum by (instance) (
+              rate(
+                node_network_receive_bytes_total{
+                  device!="lo"
+                }[5m]
+              )
+            )
+
+        - record: chatapp:node_network_transmit_bytes_per_second
+          expr: |
+            sum by (instance) (
+              rate(
+                node_network_transmit_bytes_total{
+                  device!="lo"
+                }[5m]
+              )
+            )
+
+        - record: chatapp:node_network_receive_errors_per_second
+          expr: |
+            sum by (instance) (
+              rate(
+                node_network_receive_errs_total{
+                  device!="lo"
+                }[5m]
+              )
+            )
+
+        - record: chatapp:node_network_transmit_errors_per_second
+          expr: |
+            sum by (instance) (
+              rate(
+                node_network_transmit_errs_total{
+                  device!="lo"
+                }[5m]
+              )
+            )
