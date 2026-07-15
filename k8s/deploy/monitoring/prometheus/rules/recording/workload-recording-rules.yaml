@@ -13,24 +13,21 @@ spec:
       interval: 30s
 
       rules:
+
+        
+        # ======================  CPU Usage ====================== #
+        
+
         - record: chatapp:namespace_cpu_usage_cores
           expr: |
             sum by (namespace) (
               rate(
                 container_cpu_usage_seconds_total{
                   container!="",
-                  container!="POD"
+                  container!="POD",
+                  image!=""
                 }[5m]
               )
-            )
-
-        - record: chatapp:namespace_memory_usage_bytes
-          expr: |
-            sum by (namespace) (
-              container_memory_working_set_bytes{
-                container!="",
-                container!="POD"
-              }
             )
 
         - record: chatapp:pod_cpu_usage_cores
@@ -39,9 +36,71 @@ spec:
               rate(
                 container_cpu_usage_seconds_total{
                   container!="",
-                  container!="POD"
+                  container!="POD",
+                  image!=""
                 }[5m]
               )
+            )
+
+
+        
+        # ======================  CPU Requests and Limits ====================== #
+        
+
+        - record: chatapp:pod_cpu_requests_cores
+          expr: |
+            sum by (namespace, pod) (
+              kube_pod_container_resource_requests{
+                resource="cpu",
+                unit="core"
+              }
+            )
+
+        - record: chatapp:pod_cpu_limits_cores
+          expr: |
+            sum by (namespace, pod) (
+              kube_pod_container_resource_limits{
+                resource="cpu",
+                unit="core"
+              }
+            )
+
+
+        
+        # ======================  CPU Utilization ====================== #
+        
+
+        - record: chatapp:pod_cpu_request_utilization_percent
+          expr: |
+            100 *
+            (
+              chatapp:pod_cpu_usage_cores
+              /
+              chatapp:pod_cpu_requests_cores
+            )
+
+        - record: chatapp:pod_cpu_limit_utilization_percent
+          expr: |
+            100 *
+            (
+              chatapp:pod_cpu_usage_cores
+              /
+              chatapp:pod_cpu_limits_cores
+            )
+
+
+        
+        # ======================  Memory Usage ====================== #
+        
+
+        - record: chatapp:namespace_memory_usage_bytes
+          expr: |
+            sum by (namespace) (
+              container_memory_working_set_bytes{
+                container!="",
+                container!="POD",
+                image!=""
+              }
             )
 
         - record: chatapp:pod_memory_usage_bytes
@@ -49,9 +108,61 @@ spec:
             sum by (namespace, pod) (
               container_memory_working_set_bytes{
                 container!="",
-                container!="POD"
+                container!="POD",
+                image!=""
               }
             )
+
+
+        
+        # ======================  Memory Requests and Limits ====================== #
+        
+
+        - record: chatapp:pod_memory_requests_bytes
+          expr: |
+            sum by (namespace, pod) (
+              kube_pod_container_resource_requests{
+                resource="memory",
+                unit="byte"
+              }
+            )
+
+        - record: chatapp:pod_memory_limits_bytes
+          expr: |
+            sum by (namespace, pod) (
+              kube_pod_container_resource_limits{
+                resource="memory",
+                unit="byte"
+              }
+            )
+
+
+        
+        # ======================  Memory Utilization ====================== #
+        
+
+        - record: chatapp:pod_memory_request_utilization_percent
+          expr: |
+            100 *
+            (
+              chatapp:pod_memory_usage_bytes
+              /
+              chatapp:pod_memory_requests_bytes
+            )
+
+        - record: chatapp:pod_memory_limit_utilization_percent
+          expr: |
+            100 *
+            (
+              chatapp:pod_memory_usage_bytes
+              /
+              chatapp:pod_memory_limits_bytes
+            )
+
+
+        
+        # ======================  Container Restarts ====================== #
+        
 
         - record: chatapp:pod_container_restarts_1h
           expr: |
@@ -60,6 +171,11 @@ spec:
                 kube_pod_container_status_restarts_total[1h]
               )
             )
+
+
+        
+        # ======================  Pod Network ====================== #
+        
 
         - record: chatapp:pod_network_receive_bytes_per_second
           expr: |
