@@ -2,6 +2,7 @@ apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 
 resources:
+
   # Kubernetes infrastructure Recording rules
   - rules/recording/cluster-recording-rules.yaml
   - rules/recording/node-recording-rules.yaml
@@ -21,3 +22,5 @@ resources:
   - rules/alerts/backend-alerts.yaml
   - rules/alerts/frontend-alerts.yaml
   - rules/alerts/mongodb-alerts.yaml
+
+  - alertmanager
