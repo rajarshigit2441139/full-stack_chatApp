@@ -5,19 +5,9 @@ resources:
   - ../../base
 
 patches:
-  - target:
+  - path: alertmanager-email-patch.yaml
+    target:
+      group: monitoring.coreos.com
+      version: v1alpha1
       kind: AlertmanagerConfig
       name: chatapp-alertmanager
-    patch: |-
-      - op: replace
-        path: /spec/receivers/0/emailConfigs/0/to
-        value: rajarshi.official99@gmail.com
-      - op: replace
-        path: /spec/receivers/0/emailConfigs/0/from
-        value: studymaterialraj24@gmail.com
-      - op: replace
-        path: /spec/receivers/1/emailConfigs/0/to
-        value: rajarshi.official99@gmail.com
-      - op: replace
-        path: /spec/receivers/1/emailConfigs/0/from
-        value: studymaterialraj24@gmail.com
