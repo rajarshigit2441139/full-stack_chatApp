@@ -1,0 +1,83 @@
+apiVersion: monitoring.coreos.com/v1alpha1
+kind: AlertmanagerConfig
+
+metadata:
+  name: chatapp-alertmanager
+  namespace: monitoring
+  labels:
+    release: monitoring
+
+spec:
+  route:
+    receiver: gmail-warning
+
+    groupBy:
+      - alertname
+      - namespace
+      - component
+      - severity
+
+    groupWait: 30s
+    groupInterval: 5m
+    repeatInterval: 4h
+
+    routes:
+      - receiver: gmail-critical
+        matchers:
+          - name: severity
+            value: critical
+        repeatInterval: 30m
+
+      - receiver: gmail-warning
+        matchers:
+          - name: severity
+            value: warning
+        repeatInterval: 4h
+
+  receivers:
+
+    - name: gmail-warning
+      emailConfigs:
+        - to: change-me@example.com
+          from: change-me@example.com
+
+          smarthost: smtp.gmail.com:587
+          sendResolved: true
+
+          authUsername:
+            name: alertmanager-gmail
+            key: username
+
+          authPassword:
+            name: alertmanager-gmail
+            key: password
+
+          requireTLS: true
+
+          headers:
+            subject: '{{ template "chatapp.subject" . }}'
+
+          text: '{{ template "chatapp.text" . }}'
+
+    - name: gmail-critical
+      emailConfigs:
+        - to: change-me@example.com
+          from: change-me@example.com
+
+          smarthost: smtp.gmail.com:587
+          sendResolved: true
+
+          authUsername:
+            name: alertmanager-gmail
+            key: username
+
+          authPassword:
+            name: alertmanager-gmail
+            key: password
+
+          requireTLS: true
+
+          headers:
+            subject: '[CRITICAL] {{ template "chatapp.subject" . }}'
+
+          text: '{{ template "chatapp.text" . }}'

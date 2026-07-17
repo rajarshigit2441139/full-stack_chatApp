@@ -1,0 +1,23 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+resources:
+  - ../../base
+
+patches:
+  - target:
+      kind: AlertmanagerConfig
+      name: chatapp-alertmanager
+    patch: |-
+      - op: replace
+        path: /spec/receivers/0/emailConfigs/0/to
+        value: rajarshi.official99@gmail.com
+      - op: replace
+        path: /spec/receivers/0/emailConfigs/0/from
+        value: studymaterialraj24@gmail.com
+      - op: replace
+        path: /spec/receivers/1/emailConfigs/0/to
+        value: rajarshi.official99@gmail.com
+      - op: replace
+        path: /spec/receivers/1/emailConfigs/0/from
+        value: studymaterialraj24@gmail.com
