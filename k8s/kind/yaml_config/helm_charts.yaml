@@ -33,3 +33,12 @@ prometheus:
   chart: prometheus-community/kube-prometheus-stack
   createNamespace: true
   valuesFile: yaml_config/patch-observability.yaml
+
+external-secrets:
+  name: external-secrets
+  url: https://charts.external-secrets.io
+  namespace: external-secrets
+  release: external-secrets
+  chart: external-secrets/external-secrets
+  createNamespace: true
+  valuesFile: yaml_config/patch-external-secrets.yaml
