@@ -11,7 +11,7 @@ spec:
   source:
     repoURL: https://github.com/rajarshigit2441139/full-stack_chatApp.git
     targetRevision: k8s
-    path: k8s/deploy/monitoring/prometheus/
+    path: k8s/deploy/monitoring/prometheus/overlays/staging
 
   destination:
     server: https://kubernetes.default.svc
