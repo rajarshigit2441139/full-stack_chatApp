@@ -35,49 +35,44 @@ spec:
         repeatInterval: 4h
 
   receivers:
-
     - name: gmail-warning
       emailConfigs:
-        - to: change-me@example.com
-          from: change-me@example.com
+        - to: "__EMAIL_TO__"
+          from: "__EMAIL_FROM__"
 
           smarthost: smtp.gmail.com:587
+          requireTLS: true
           sendResolved: true
 
-          authUsername:
-            name: alertmanager-gmail
-            key: username
+          authUsername: "__SMTP_USERNAME__"
 
           authPassword:
             name: alertmanager-gmail
             key: password
 
-          requireTLS: true
-
           headers:
-            subject: '{{ template "chatapp.subject" . }}'
+            - key: Subject
+              value: '{{ template "chatapp.subject" . }}'
 
           text: '{{ template "chatapp.text" . }}'
 
     - name: gmail-critical
       emailConfigs:
-        - to: change-me@example.com
-          from: change-me@example.com
+        - to: "__EMAIL_TO__"
+          from: "__EMAIL_FROM__"
 
           smarthost: smtp.gmail.com:587
+          requireTLS: true
           sendResolved: true
 
-          authUsername:
-            name: alertmanager-gmail
-            key: username
+          authUsername: "__SMTP_USERNAME__"
 
           authPassword:
             name: alertmanager-gmail
             key: password
 
-          requireTLS: true
-
           headers:
-            subject: '[CRITICAL] {{ template "chatapp.subject" . }}'
+            - key: Subject
+              value: '[CRITICAL] {{ template "chatapp.subject" . }}'
 
           text: '{{ template "chatapp.text" . }}'
