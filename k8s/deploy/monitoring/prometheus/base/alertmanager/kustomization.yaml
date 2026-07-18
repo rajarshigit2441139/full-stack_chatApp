@@ -7,10 +7,5 @@ resources:
   - alertmanager-config.yaml
   - gmail-external-secret.yaml
 
-configMapGenerator:
-  - name: alertmanager-email-templates
-    files:
-      - templates.tmpl
-
 generatorOptions:
   disableNameSuffixHash: true
