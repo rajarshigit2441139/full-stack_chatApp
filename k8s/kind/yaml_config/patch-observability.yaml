@@ -76,6 +76,7 @@ alertmanager:
 
       {{ end }}
 
+  alertmanagerSpec:
     nodeSelector:
       app: monitoring
 
