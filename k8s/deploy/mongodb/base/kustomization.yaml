@@ -1,0 +1,9 @@
+  resources:
+  - secret.yaml
+  - mongodb.yaml
+  - mongodb-database-sa.yaml
+  - mongodb-role.yaml
+  - mongodb-rolebinding.yaml
+  - mongodb-exporter-deployment.yaml
+  - mongodb-exporter-service.yaml
+  - mongodb-servicemonitor.yaml

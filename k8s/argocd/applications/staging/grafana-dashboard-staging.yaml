@@ -1,0 +1,23 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+
+metadata:
+  name: grafana-dashboard-staging
+  namespace: argocd
+
+spec:
+  project: staging
+
+  source:
+    repoURL: https://github.com/rajarshigit2441139/full-stack_chatApp.git
+    targetRevision: k8s
+    path: k8s/deploy/monitoring/grafana/
+
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: monitoring
+
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true

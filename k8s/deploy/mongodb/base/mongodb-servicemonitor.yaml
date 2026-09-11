@@ -1,0 +1,21 @@
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: mongodb
+  labels:
+    release: monitoring
+
+spec:
+  selector:
+    matchLabels:
+      app: mongodb-exporter
+
+  namespaceSelector:
+    matchNames:
+      - db
+
+  endpoints:
+    - port: metrics
+      path: /metrics
+      interval: 15s
+      scrapeTimeout: 10s
