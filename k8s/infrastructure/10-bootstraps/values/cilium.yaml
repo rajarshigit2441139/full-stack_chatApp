@@ -1,0 +1,38 @@
+
+ipam:
+  mode: eni
+enableEndpointRoutes: true
+kubeProxyReplacement: true
+eni:
+  enabled: true
+
+
+# Cilium DaemonSet
+tolerations:
+  - operator: Exists
+
+operator:
+  replicas: 1
+  nodeSelector:
+    app: platform
+  tolerations:
+    - key: app
+      operator: Equal
+      value: platform
+      effect: NoSchedule
+
+hubble:
+  enabled: true
+  relay:
+    enabled: true
+    nodeSelector:
+      app: monitoring
+    tolerations:
+      - operator: Exists
+
+  ui:
+    enabled: true
+    nodeSelector:
+      app: monitoring
+    tolerations:
+      - operator: Exists

@@ -1,0 +1,71 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: mongodb-exporter
+  labels:
+    app: mongodb-exporter
+
+spec:
+  replicas: 1
+
+  selector:
+    matchLabels:
+      app: mongodb-exporter
+
+  template:
+    metadata:
+      labels:
+        app: mongodb-exporter
+
+    spec:
+      tolerations:
+            - key: "app"
+              operator: "Equal"
+              value: "db"
+              effect: "NoSchedule"
+      containers:
+        - name: mongodb-exporter
+          image: percona/mongodb_exporter:0.47.2
+          imagePullPolicy: IfNotPresent
+
+          args:
+            - --collect-all
+            - --compatible-mode
+
+          env:
+            - name: MONGODB_URI
+              valueFrom:
+                secretKeyRef:
+                  name: mongodb-scram #mongodb-admin-root
+                  key: connectionString.standard
+
+          ports:
+            - name: metrics
+              containerPort: 9216
+              protocol: TCP
+
+          livenessProbe:
+            httpGet:
+              path: /metrics
+              port: metrics
+            initialDelaySeconds: 30
+            periodSeconds: 30
+            timeoutSeconds: 10
+            failureThreshold: 5
+
+          readinessProbe:
+            httpGet:
+              path: /metrics
+              port: metrics
+            initialDelaySeconds: 15
+            periodSeconds: 20
+            timeoutSeconds: 10
+            failureThreshold: 3
+
+          resources:
+            requests:
+              cpu: 100m
+              memory: 128Mi
+            limits:
+              cpu: 5000m
+              memory: 512Mi

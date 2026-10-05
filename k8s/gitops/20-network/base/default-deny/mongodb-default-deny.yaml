@@ -1,0 +1,9 @@
+apiVersion: cilium.io/v2
+kind: CiliumNetworkPolicy
+metadata:
+  name: mongodb-default-deny
+  namespace: db
+spec:
+  endpointSelector: {}
+  ingress: []
+  egress: []

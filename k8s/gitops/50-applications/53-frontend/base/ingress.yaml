@@ -1,0 +1,37 @@
+
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: frontend-ingress
+  namespace: front
+  annotations:
+    alb.ingress.kubernetes.io/scheme: internet-facing
+    alb.ingress.kubernetes.io/target-type: ip
+
+    alb.ingress.kubernetes.io/security-groups: "sg-0b0c693e8a5c02af4"
+    alb.ingress.kubernetes.io/manage-backend-security-group-rules: "true"
+
+    alb.ingress.kubernetes.io/listen-ports: '[{"HTTPS":443}]'
+    alb.ingress.kubernetes.io/certificate-arn: 'arn:aws:acm:ap-south-1:100678004827:certificate/9fb490ba-0262-4bc4-a337-aa9c1d37f4d9'
+    alb.ingress.kubernetes.io/ssl-redirect: "443"
+
+    alb.ingress.kubernetes.io/healthcheck-path: /
+    alb.ingress.kubernetes.io/healthcheck-port: "80"
+
+    alb.ingress.kubernetes.io/group.name: public
+    alb.ingress.kubernetes.io/group.order: "10"
+
+spec:
+  ingressClassName: alb
+
+  rules:
+    - host: chatone.operation.uk
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: frontend-svc
+                port:
+                  number: 80

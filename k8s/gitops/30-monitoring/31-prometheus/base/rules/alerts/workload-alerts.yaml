@@ -1,0 +1,149 @@
+apiVersion: monitoring.coreos.com/v1
+kind: PrometheusRule
+
+metadata:
+  name: chatapp-workload-alerts
+  namespace: monitoring
+  labels:
+    release: monitoring
+
+spec:
+  groups:
+    - name: chatapp.workload.alerts
+      rules:
+
+        
+        # ======================  CPU ====================== #
+        
+
+        - alert: ChatAppPodHighCPURequestUtilization
+          expr: |
+            chatapp:pod_cpu_request_utilization_percent{
+              namespace=~"front|back"
+            } > 90
+          for: 10m
+          labels:
+            severity: warning
+            component: workload
+          annotations:
+            summary: "Pod CPU usage is above its request"
+            description: >-
+              Pod {{ $labels.namespace }}/{{ $labels.pod }}
+              is using {{ $value | printf "%.2f" }}% of its requested CPU.
+
+        - alert: ChatAppPodHighCPULimitUtilization
+          expr: |
+            chatapp:pod_cpu_limit_utilization_percent{
+              namespace=~"front|back"
+            } > 85
+          for: 10m
+          labels:
+            severity: warning
+            component: workload
+          annotations:
+            summary: "Pod CPU usage is approaching its limit"
+            description: >-
+              Pod {{ $labels.namespace }}/{{ $labels.pod }}
+              is using {{ $value | printf "%.2f" }}% of its CPU limit.
+
+        - alert: ChatAppPodCriticalCPULimitUtilization
+          expr: |
+            chatapp:pod_cpu_limit_utilization_percent{
+              namespace=~"front|back"
+            } > 95
+          for: 5m
+          labels:
+            severity: critical
+            component: workload
+          annotations:
+            summary: "Pod CPU usage is near its limit"
+            description: >-
+              Pod {{ $labels.namespace }}/{{ $labels.pod }}
+              is using {{ $value | printf "%.2f" }}% of its CPU limit.
+
+
+        
+        # ======================  Memory ====================== #
+        
+
+        - alert: ChatAppPodHighMemoryRequestUtilization
+          expr: |
+            chatapp:pod_memory_request_utilization_percent{
+              namespace=~"front|back"
+            } > 100
+          for: 10m
+          labels:
+            severity: warning
+            component: workload
+          annotations:
+            summary: "Pod memory usage exceeds its request"
+            description: >-
+              Pod {{ $labels.namespace }}/{{ $labels.pod }}
+              is using {{ $value | printf "%.2f" }}% of its requested memory.
+
+        - alert: ChatAppPodHighMemoryLimitUtilization
+          expr: |
+            chatapp:pod_memory_limit_utilization_percent{
+              namespace=~"front|back"
+            } > 80
+          for: 10m
+          labels:
+            severity: warning
+            component: workload
+          annotations:
+            summary: "Pod memory usage is approaching its limit"
+            description: >-
+              Pod {{ $labels.namespace }}/{{ $labels.pod }}
+              is using {{ $value | printf "%.2f" }}% of its memory limit.
+
+        - alert: ChatAppPodCriticalMemoryLimitUtilization
+          expr: |
+            chatapp:pod_memory_limit_utilization_percent{
+              namespace=~"front|back"
+            } > 90
+          for: 5m
+          labels:
+            severity: critical
+            component: workload
+          annotations:
+            summary: "Pod memory usage is near its limit"
+            description: >-
+              Pod {{ $labels.namespace }}/{{ $labels.pod }}
+              is using {{ $value | printf "%.2f" }}% of its memory limit.
+
+
+        
+        # ======================  Restarts ====================== #
+        
+
+        - alert: ChatAppPodFrequentRestarts
+          expr: |
+            chatapp:pod_container_restarts_1h{
+              namespace=~"front|back|db"
+            } > 3
+          for: 5m
+          labels:
+            severity: warning
+            component: workload
+          annotations:
+            summary: "Pod is restarting frequently"
+            description: >-
+              Pod {{ $labels.namespace }}/{{ $labels.pod }}
+              restarted {{ $value | printf "%.0f" }}
+              time(s) during the last hour.
+
+        - alert: ChatAppPodRestartStorm
+          expr: |
+            chatapp:pod_container_restarts_1h{
+              namespace=~"front|back|db"
+            } > 10
+          for: 5m
+          labels:
+            severity: critical
+            component: workload
+          annotations:
+            summary: "Pod restart storm detected"
+            description: >-
+              Pod {{ $labels.namespace }}/{{ $labels.pod }}
+              restarted {{ $value | printf "%.0f" }}
+              time(s) during the last hour.

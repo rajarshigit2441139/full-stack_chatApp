@@ -1,0 +1,9 @@
+apiVersion: cilium.io/v2
+kind: CiliumNetworkPolicy
+metadata:
+  name: frontend-default-deny
+  namespace: front
+spec:
+  endpointSelector: {}
+  ingress: []
+  egress: []

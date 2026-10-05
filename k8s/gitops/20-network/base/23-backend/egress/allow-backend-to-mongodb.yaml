@@ -1,0 +1,20 @@
+apiVersion: cilium.io/v2
+kind: CiliumNetworkPolicy
+metadata:
+  name: allow-backend-to-mongodb
+  namespace: back
+
+spec:
+  endpointSelector:
+    matchLabels:
+      app: backend
+
+  egress:
+    - toEndpoints:
+        - matchLabels:
+            k8s:io.kubernetes.pod.namespace: db
+            app: mongodb-svc
+      toPorts:
+        - ports:
+            - port: "27017"
+              protocol: TCP

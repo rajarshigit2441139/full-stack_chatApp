@@ -1,0 +1,47 @@
+cilium:
+  repo:
+    name: cilium
+    url: https://helm.cilium.io
+  chart: cilium/cilium
+  release: cilium
+  namespace: kube-system
+  version: "1.19.6"
+  createNamespace: false
+  values: values/cilium.yaml
+  wait:
+    - kind: daemonset
+      name: cilium
+      namespace: kube-system
+
+    - kind: deployment
+      name: cilium-operator
+      namespace: kube-system
+
+argocd:
+  repo:
+    name: argo
+    url: https://argoproj.github.io/argo-helm
+  chart: argo/argo-cd
+  release: argocd
+  namespace: argocd
+  version: "10.1.3"
+  createNamespace: true
+  values: values/argocd.yaml
+  wait:
+    - kind: deployment
+      name: argocd-server
+      namespace: argocd
+
+    - kind: deployment
+      name: argocd-repo-server
+      namespace: argocd
+
+prometheus:
+  name: prometheus-community
+  url: https://prometheus-community.github.io/helm-charts
+  namespace: monitoring
+  release: monitoring
+  chart: prometheus-community/kube-prometheus-stack
+  version: 87.12.2
+  createNamespace: true
+  valuesFile: yaml_config/patch-observability.yaml

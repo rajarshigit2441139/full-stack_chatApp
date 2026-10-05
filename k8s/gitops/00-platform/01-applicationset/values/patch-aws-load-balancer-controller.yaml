@@ -1,0 +1,19 @@
+clusterName: chatappcluster
+region: ap-south-1
+
+serviceAccount:
+  create: false
+  name: aws-load-balancer-controller
+
+replicaCount: 2
+
+nodeSelector:
+  app: platform
+
+tolerations:
+  - key: app
+    operator: Equal
+    value: platform
+    effect: NoSchedule
+
+

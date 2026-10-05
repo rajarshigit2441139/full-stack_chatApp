@@ -1,0 +1,8 @@
+resources:
+  - 21-cluster
+  - 22-frontend
+  - 23-backend
+  - 24-mongodb
+  - 25-monitoring
+  - 26-argocd
+  - default-deny

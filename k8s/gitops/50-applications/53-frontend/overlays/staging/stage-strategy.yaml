@@ -1,0 +1,14 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Rollout
+metadata:
+  labels:
+    app: frontend
+    level: stage
+  name: chat-app-frontend
+spec:
+  strategy:
+    blueGreen:
+      autoPromotionEnabled: true
+      autoPromotionSeconds: 30
+      activeService: frontend-svc
+      previewService: frontend-preview-svc

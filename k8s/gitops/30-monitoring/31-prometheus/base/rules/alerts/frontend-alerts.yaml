@@ -1,0 +1,37 @@
+apiVersion: monitoring.coreos.com/v1
+kind: PrometheusRule
+
+metadata:
+  name: chatapp-frontend-alerts
+  namespace: monitoring
+  labels:
+    release: monitoring
+
+spec:
+  groups:
+    - name: chatapp.frontend.alerts
+      rules:
+
+        - alert: ChatAppFrontendDown
+          expr: chatapp:frontend_up == 0
+          for: 2m
+          labels:
+            severity: critical
+            component: frontend
+          annotations:
+            summary: "Chat App frontend is down"
+            description: "Prometheus has been unable to scrape the active frontend service for at least 2 minutes."
+
+        - alert: ChatAppFrontendConnectionHandlingDegraded
+          expr: |
+            chatapp:frontend_nginx_connection_handling_percent < 95
+            and
+            chatapp:frontend_nginx_connections_accepted_per_second > 0
+          for: 10m
+          labels:
+            severity: warning
+            component: frontend
+          annotations:
+            summary: "NGINX connection handling is degraded"
+            description: "Frontend NGINX is handling {{ $value | printf \"%.2f\" }}% of accepted connections."
+            

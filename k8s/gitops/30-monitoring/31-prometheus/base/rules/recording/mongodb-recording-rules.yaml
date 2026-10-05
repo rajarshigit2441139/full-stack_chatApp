@@ -1,0 +1,297 @@
+apiVersion: monitoring.coreos.com/v1
+kind: PrometheusRule
+
+metadata:
+  name: chatapp-mongodb-recording-rules
+  namespace: monitoring
+  labels:
+    release: monitoring
+
+spec:
+  groups:
+    - name: chatapp.mongodb
+      interval: 30s
+
+      rules:
+
+        
+        # ====================== Availability ====================== #
+        
+
+        - record: chatapp:mongodb_up
+          expr: |
+            max(
+              mongodb_up{
+                namespace="db"
+              }
+            )
+
+
+        
+        # ====================== Connections ====================== #
+        
+
+        - record: chatapp:mongodb_connections_current
+          expr: |
+            sum(
+              mongodb_ss_connections_current{
+                namespace="db"
+              }
+            )
+
+        - record: chatapp:mongodb_connections_available
+          expr: |
+            sum(
+              mongodb_ss_connections_available{
+                namespace="db"
+              }
+            )
+
+        - record: chatapp:mongodb_connections_active
+          expr: |
+            sum(
+              mongodb_ss_connections_active{
+                namespace="db"
+              }
+            )
+
+
+        
+        # ====================== Operations Per Second ====================== #
+        
+
+        - record: chatapp:mongodb_insert_operations_per_second
+          expr: |
+            sum(
+              rate(
+                mongodb_ss_opcounters_insert{
+                  namespace="db"
+                }[5m]
+              )
+            )
+
+        - record: chatapp:mongodb_query_operations_per_second
+          expr: |
+            sum(
+              rate(
+                mongodb_ss_opcounters_query{
+                  namespace="db"
+                }[5m]
+              )
+            )
+
+        - record: chatapp:mongodb_update_operations_per_second
+          expr: |
+            sum(
+              rate(
+                mongodb_ss_opcounters_update{
+                  namespace="db"
+                }[5m]
+              )
+            )
+
+        - record: chatapp:mongodb_delete_operations_per_second
+          expr: |
+            sum(
+              rate(
+                mongodb_ss_opcounters_delete{
+                  namespace="db"
+                }[5m]
+              )
+            )
+
+        - record: chatapp:mongodb_command_operations_per_second
+          expr: |
+            sum(
+              rate(
+                mongodb_ss_opcounters_command{
+                  namespace="db"
+                }[5m]
+              )
+            )
+
+        - record: chatapp:mongodb_operations_per_second
+          expr: |
+            sum(
+              rate(
+                mongodb_ss_opcounters_insert{
+                  namespace="db"
+                }[5m]
+              )
+            )
+            +
+            sum(
+              rate(
+                mongodb_ss_opcounters_query{
+                  namespace="db"
+                }[5m]
+              )
+            )
+            +
+            sum(
+              rate(
+                mongodb_ss_opcounters_update{
+                  namespace="db"
+                }[5m]
+              )
+            )
+            +
+            sum(
+              rate(
+                mongodb_ss_opcounters_delete{
+                  namespace="db"
+                }[5m]
+              )
+            )
+            +
+            sum(
+              rate(
+                mongodb_ss_opcounters_command{
+                  namespace="db"
+                }[5m]
+              )
+            )
+
+
+        
+        # ====================== Memory ====================== #
+        
+
+        - record: chatapp:mongodb_resident_memory_bytes
+          expr: |
+            sum(
+              mongodb_ss_mem_resident{
+                namespace="db"
+              }
+            ) * 1024 * 1024
+
+        - record: chatapp:mongodb_virtual_memory_bytes
+          expr: |
+            sum(
+              mongodb_ss_mem_virtual{
+                namespace="db"
+              }
+            ) * 1024 * 1024
+
+
+        
+        # ====================== WiredTiger Cache ====================== #
+        
+
+        - record: chatapp:mongodb_wiredtiger_cache_bytes
+          expr: |
+            sum(
+              mongodb_ss_wt_cache_bytes_currently_in_the_cache{
+                namespace="db"
+              }
+            )
+
+        - record: chatapp:mongodb_wiredtiger_cache_dirty_bytes
+          expr: |
+            sum(
+              mongodb_ss_wt_cache_tracked_dirty_bytes_in_the_cache{
+                namespace="db"
+              }
+            )
+
+        - record: chatapp:mongodb_wiredtiger_cache_max_bytes
+          expr: |
+            sum(
+              mongodb_ss_wt_cache_maximum_bytes_configured{
+                namespace="db"
+              }
+            )
+
+        - record: chatapp:mongodb_wiredtiger_cache_usage_percent
+          expr: |
+            100 *
+            (
+              sum(
+                mongodb_ss_wt_cache_bytes_currently_in_the_cache{
+                  namespace="db"
+                }
+              )
+              /
+              clamp_min(
+                sum(
+                  mongodb_ss_wt_cache_maximum_bytes_configured{
+                    namespace="db"
+                  }
+                ),
+                1
+              )
+            )
+
+        - record: chatapp:mongodb_wiredtiger_cache_dirty_percent
+          expr: |
+            100 *
+            (
+              sum(
+                mongodb_ss_wt_cache_tracked_dirty_bytes_in_the_cache{
+                  namespace="db"
+                }
+              )
+              /
+              clamp_min(
+                sum(
+                  mongodb_ss_wt_cache_maximum_bytes_configured{
+                    namespace="db"
+                  }
+                ),
+                1
+              )
+            )
+
+
+        
+        # ====================== Network ====================== #
+        
+
+        - record: chatapp:mongodb_network_receive_bytes_per_second
+          expr: |
+            sum(
+              rate(
+                mongodb_ss_network_bytesIn{
+                  namespace="db"
+                }[5m]
+              )
+            )
+
+        - record: chatapp:mongodb_network_transmit_bytes_per_second
+          expr: |
+            sum(
+              rate(
+                mongodb_ss_network_bytesOut{
+                  namespace="db"
+                }[5m]
+              )
+            )
+
+
+        
+        # ====================== Replica Set ====================== #
+        
+
+        - record: chatapp:mongodb_voting_members
+          expr: |
+            max(
+              mongodb_votingMembersCount{
+                namespace="db"
+              }
+            )
+
+        - record: chatapp:mongodb_writable_voting_members
+          expr: |
+            max(
+              mongodb_writableVotingMembersCount{
+                namespace="db"
+              }
+            )
+
+        - record: chatapp:mongodb_write_majority_count
+          expr: |
+            max(
+              mongodb_writeMajorityCount{
+                namespace="db"
+              }
+            )

@@ -1,0 +1,24 @@
+apiVersion: cilium.io/v2
+kind: CiliumNetworkPolicy
+metadata:
+  name: allow-repo-to-github
+  namespace: argocd
+
+spec:
+  endpointSelector:
+    matchLabels:
+      app.kubernetes.io/name: argocd-repo-server
+
+  egress:
+    - toFQDNs:
+        - matchName: github.com
+        - matchName: api.github.com
+        - matchName: raw.githubusercontent.com
+        - matchName: codeload.github.com
+        - matchName: objects.githubusercontent.com
+        - matchPattern: "*.githubusercontent.com"
+        - matchName: ghcr.io
+      toPorts:
+        - ports:
+            - port: "443"
+              protocol: TCP

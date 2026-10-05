@@ -1,0 +1,25 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+resources:
+  - allow-applicationset-to-kube-dns.yaml
+  - allow-applicationset-to-kubeapi.yaml
+
+  - allow-controller-to-kubeapi.yaml
+  - allow-controller-to-kube-dns.yaml
+
+  - allow-notifications-to-kube-dns.yaml
+  - allow-notifications-to-kubeapi.yaml
+
+  - allow-repo-to-github.yaml
+  - allow-repo-to-kube-dns.yaml
+  
+  - allow-server-to-kube-dns.yaml
+  - allow-server-to-kubeapi.yaml
+
+
+
+  
+
+  
+  

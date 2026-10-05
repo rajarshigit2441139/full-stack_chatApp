@@ -1,0 +1,129 @@
+apiVersion: monitoring.coreos.com/v1
+kind: PrometheusRule
+
+metadata:
+  name: chatapp-frontend-recording-rules
+  namespace: monitoring
+  labels:
+    release: monitoring
+
+spec:
+  groups:
+    - name: chatapp.frontend
+      interval: 30s
+
+      rules:
+
+        
+        # ======================  Availability ====================== #
+        
+
+        - record: chatapp:frontend_up
+          expr: |
+            max(
+              up{
+                namespace="front",
+                service="frontend-svc"
+              }
+            )
+
+
+        
+        # ======================  NGINX Connections ====================== #
+        
+
+        - record: chatapp:frontend_nginx_connections_active
+          expr: |
+            sum(
+              nginx_connections_active{
+                namespace="front"
+              }
+            )
+
+        - record: chatapp:frontend_nginx_connections_reading
+          expr: |
+            sum(
+              nginx_connections_reading{
+                namespace="front"
+              }
+            )
+
+        - record: chatapp:frontend_nginx_connections_writing
+          expr: |
+            sum(
+              nginx_connections_writing{
+                namespace="front"
+              }
+            )
+
+        - record: chatapp:frontend_nginx_connections_waiting
+          expr: |
+            sum(
+              nginx_connections_waiting{
+                namespace="front"
+              }
+            )
+
+
+        
+        # ======================  NGINX Connection Rates ====================== #
+        
+
+        - record: chatapp:frontend_nginx_connections_accepted_per_second
+          expr: |
+            sum(
+              rate(
+                nginx_connections_accepted{
+                  namespace="front"
+                }[5m]
+              )
+            )
+
+        - record: chatapp:frontend_nginx_connections_handled_per_second
+          expr: |
+            sum(
+              rate(
+                nginx_connections_handled{
+                  namespace="front"
+                }[5m]
+              )
+            )
+
+        - record: chatapp:frontend_nginx_requests_per_second
+          expr: |
+            sum(
+              rate(
+                nginx_http_requests_total{
+                  namespace="front"
+                }[5m]
+              )
+            )
+
+
+        
+        # ======================  NGINX Connection Handling Ratio ====================== #
+        
+
+        - record: chatapp:frontend_nginx_connection_handling_percent
+          expr: |
+            100 *
+            (
+              sum(
+                rate(
+                  nginx_connections_handled{
+                    namespace="front"
+                  }[5m]
+                )
+              )
+              /
+              clamp_min(
+                sum(
+                  rate(
+                    nginx_connections_accepted{
+                      namespace="front"
+                    }[5m]
+                  )
+                ),
+                0.000001
+              )
+            )

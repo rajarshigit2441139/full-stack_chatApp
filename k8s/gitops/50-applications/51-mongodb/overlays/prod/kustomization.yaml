@@ -1,0 +1,13 @@
+resources:
+  - ../../base
+
+namespace: db
+
+patches: 
+  - target:
+         kind: MongoDBCommunity
+         name: mongodb
+    patch: |-
+      - op: replace
+        path: /spec/members
+        value: 2

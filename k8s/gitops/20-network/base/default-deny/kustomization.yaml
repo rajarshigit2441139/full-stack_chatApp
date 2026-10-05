@@ -1,0 +1,10 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+resources:
+  - frontend-default-deny.yaml
+  - backend-default-deny.yaml
+  - mongodb-default-deny.yaml
+  - monitoring-default-deny.yaml
+  - argocd-default-deny.yaml
+  - external-secrets-default-deny.yaml

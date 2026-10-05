@@ -1,0 +1,11 @@
+operator:
+  watchNamespace: db
+
+nodeSelector:
+  app: platform
+
+tolerations:
+  - key: app
+    operator: Equal
+    value: platform
+    effect: NoSchedule

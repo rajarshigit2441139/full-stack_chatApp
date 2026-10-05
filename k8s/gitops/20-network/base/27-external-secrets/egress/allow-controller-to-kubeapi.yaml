@@ -1,0 +1,14 @@
+apiVersion: cilium.io/v2
+kind: CiliumNetworkPolicy
+metadata:
+  name: allow-controller-to-kubeapi
+  namespace: external-secrets
+
+spec:
+  endpointSelector:
+    matchLabels:
+      app.kubernetes.io/name: external-secrets
+
+  egress:
+    - toEntities:
+        - kube-apiserver

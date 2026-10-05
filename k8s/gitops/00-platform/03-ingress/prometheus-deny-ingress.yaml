@@ -1,0 +1,33 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: prometheus-deny-ingress
+  namespace: monitoring
+  annotations:
+    alb.ingress.kubernetes.io/group.name: public
+    alb.ingress.kubernetes.io/group.order: "41"
+
+    alb.ingress.kubernetes.io/actions.prometheus-deny: >
+      {
+        "type": "fixed-response",
+        "fixedResponseConfig": {
+          "contentType": "text/plain",
+          "statusCode": "403",
+          "messageBody": "Access denied"
+        }
+      }
+
+spec:
+  ingressClassName: alb
+
+  rules:
+    - host: prometheus.operation.uk
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: prometheus-deny
+                port:
+                  name: use-annotation

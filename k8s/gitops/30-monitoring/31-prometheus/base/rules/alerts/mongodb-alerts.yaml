@@ -1,0 +1,56 @@
+apiVersion: monitoring.coreos.com/v1
+kind: PrometheusRule
+
+metadata:
+  name: chatapp-mongodb-alerts
+  namespace: monitoring
+  labels:
+    release: monitoring
+
+spec:
+  groups:
+    - name: chatapp.mongodb.alerts
+      rules:
+
+        - alert: ChatAppMongoDBDown
+          expr: chatapp:mongodb_up == 0
+          for: 2m
+          labels:
+            severity: critical
+            component: mongodb
+          annotations:
+            summary: "MongoDB is down"
+            description: "The MongoDB exporter has reported MongoDB as unavailable for at least 2 minutes."
+
+        - alert: ChatAppMongoDBWiredTigerCacheHigh
+          expr: chatapp:mongodb_wiredtiger_cache_usage_percent > 80
+          for: 10m
+          labels:
+            severity: warning
+            component: mongodb
+          annotations:
+            summary: "MongoDB WiredTiger cache usage is high"
+            description: "WiredTiger cache usage is {{ $value | printf \"%.2f\" }}%."
+
+        - alert: ChatAppMongoDBWiredTigerCacheCritical
+          expr: chatapp:mongodb_wiredtiger_cache_usage_percent > 95
+          for: 5m
+          labels:
+            severity: critical
+            component: mongodb
+          annotations:
+            summary: "MongoDB WiredTiger cache usage is critical"
+            description: "WiredTiger cache usage is {{ $value | printf \"%.2f\" }}%."
+
+        - alert: ChatAppMongoDBWritableMembersUnavailable
+          expr: |
+            chatapp:mongodb_writable_voting_members
+            <
+            chatapp:mongodb_write_majority_count
+          for: 5m
+          labels:
+            severity: critical
+            component: mongodb
+          annotations:
+            summary: "MongoDB does not have enough writable voting members"
+            description: "The MongoDB replica set may be unable to acknowledge majority writes."

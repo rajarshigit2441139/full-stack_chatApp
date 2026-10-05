@@ -1,0 +1,79 @@
+apiVersion: argoproj.io/v1alpha1
+kind: ApplicationSet
+
+metadata:
+  name: platform
+  namespace: argocd
+
+spec:
+  generators:
+    - list:
+        elements:
+
+          - name:  aws-load-balancer-controller
+            namespace: kube-system
+            repoURL: https://aws.github.io/eks-charts
+            chart: aws-load-balancer-controller
+            version: "3.4.3"
+            releaseName: aws-load-balancer-controller
+            valuesFile: values/patch-aws-load-balancer-controller.yaml
+
+          - name: argo-rollouts
+            namespace: argo-rollouts
+            repoURL: https://argoproj.github.io/argo-helm
+            chart: argo-rollouts
+            version: "2.40.5"
+            releaseName: argo-rollouts
+            valuesFile: values/patch-argo-rollout.yaml
+
+          - name: mongodb-operator
+            namespace: mongodb-operator
+            repoURL: https://mongodb.github.io/helm-charts
+            chart: community-operator
+            version: "0.13.0"
+            releaseName: mongodb-operator
+            valuesFile: values/patch-mongodb-operator.yaml
+
+          - name: prometheus
+            namespace: monitoring
+            repoURL: https://prometheus-community.github.io/helm-charts
+            chart: kube-prometheus-stack
+            version: "87.12.2"
+            releaseName: monitoring
+            valuesFile: values/patch-observability.yaml
+
+  template:
+    metadata:
+      name: '{{name}}'
+      namespace: argocd
+
+    spec:
+      project: platform-staging
+
+      sources:
+        # Helm chart
+        - repoURL: '{{repoURL}}'
+          chart: '{{chart}}'
+          targetRevision: '{{version}}'
+
+          helm:
+            releaseName: '{{releaseName}}'
+            valueFiles:
+              - $values/k8s/gitops/00-platform/{{valuesFile}}
+
+        # Git repository containing values files
+        - repoURL: 'https://github.com/rajarshigit2441139/full-stack_chatApp.git'
+          targetRevision: k8s
+          ref: values
+
+      destination:
+        server: https://kubernetes.default.svc
+        namespace: '{{namespace}}'
+
+      syncPolicy:
+        automated:
+          prune: true
+          selfHeal: true
+
+        syncOptions:
+          - CreateNamespace=true

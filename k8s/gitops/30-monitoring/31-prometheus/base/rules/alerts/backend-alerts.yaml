@@ -1,0 +1,59 @@
+apiVersion: monitoring.coreos.com/v1
+kind: PrometheusRule
+
+metadata:
+  name: chatapp-backend-alerts
+  namespace: monitoring
+  labels:
+    release: monitoring
+
+spec:
+  groups:
+    - name: chatapp.backend.alerts
+      rules:
+
+        - alert: ChatAppBackendDown
+          expr: chatapp:backend_up == 0
+          for: 2m
+          labels:
+            severity: critical
+            component: backend
+          annotations:
+            summary: "Chat App backend is down"
+            description: "Prometheus has been unable to scrape the active backend service for at least 2 minutes."
+
+        - alert: ChatAppBackendHigh5xxErrorRate
+          expr: |
+            chatapp:backend_http_5xx_error_percent > 5
+            and
+            chatapp:backend_http_requests_per_second > 0.1
+          for: 5m
+          labels:
+            severity: warning
+            component: backend
+          annotations:
+            summary: "High backend HTTP 5xx error rate"
+            description: "Backend HTTP 5xx error rate is {{ $value | printf \"%.2f\" }}%."
+
+        - alert: ChatAppBackendCritical5xxErrorRate
+          expr: |
+            chatapp:backend_http_5xx_error_percent > 20
+            and
+            chatapp:backend_http_requests_per_second > 0.1
+          for: 3m
+          labels:
+            severity: critical
+            component: backend
+          annotations:
+            summary: "Critical backend HTTP 5xx error rate"
+            description: "Backend HTTP 5xx error rate has exceeded 20%."
+
+        - alert: ChatAppBackendHighP95Latency
+          expr: chatapp:backend_http_latency_p95_seconds > 1
+          for: 10m
+          labels:
+            severity: warning
+            component: backend
+          annotations:
+            summary: "High backend P95 latency"
+            description: "Backend P95 latency is {{ $value | printf \"%.3f\" }} seconds."

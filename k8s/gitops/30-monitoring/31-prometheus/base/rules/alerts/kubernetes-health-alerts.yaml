@@ -1,0 +1,33 @@
+apiVersion: monitoring.coreos.com/v1
+kind: PrometheusRule
+
+metadata:
+  name: chatapp-kubernetes-health-alerts
+  namespace: monitoring
+  labels:
+    release: monitoring
+
+spec:
+  groups:
+    - name: chatapp.kubernetes.health.alerts
+      rules:
+
+        - alert: ChatAppDeploymentUnavailable
+          expr: chatapp:deployment_unavailable_replicas > 0
+          for: 5m
+          labels:
+            severity: critical
+            component: kubernetes
+          annotations:
+            summary: "Deployment has unavailable replicas"
+            description: "Deployment {{ $labels.namespace }}/{{ $labels.deployment }} has {{ $value }} unavailable replica(s)."
+
+        - alert: ChatAppStatefulSetNotReady
+          expr: chatapp:statefulset_not_ready_replicas > 0
+          for: 10m
+          labels:
+            severity: critical
+            component: kubernetes
+          annotations:
+            summary: "StatefulSet has unready replicas"
+            description: "StatefulSet {{ $labels.namespace }}/{{ $labels.statefulset }} has {{ $value }} replica(s) that are not ready."

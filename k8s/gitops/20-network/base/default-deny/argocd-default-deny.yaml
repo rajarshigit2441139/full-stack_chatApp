@@ -1,0 +1,9 @@
+apiVersion: cilium.io/v2
+kind: CiliumNetworkPolicy
+metadata:
+  name: argocd-default-deny
+  namespace: argocd
+spec:
+  endpointSelector: {}
+  ingress: []
+  egress: []

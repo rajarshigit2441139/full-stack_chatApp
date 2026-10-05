@@ -1,0 +1,13 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+resources:
+  - allow-prometheus-to-alertmanager.yaml
+  - allow-prometheus-to-backend.yaml
+  - allow-prometheus-to-frontend.yaml
+  - allow-prometheus-to-kube-dns.yaml
+  - allow-prometheus-to-kubeapi.yaml
+  - allow-prometheus-to-kube-state-metrics.yaml
+  - allow-prometheus-to-mongodb-exporter.yaml
+  - allow-prometheus-to-node-exporter.yaml
+  - allow-prometheus-to-operator.yaml

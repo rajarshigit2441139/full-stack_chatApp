@@ -1,0 +1,78 @@
+apiVersion: monitoring.coreos.com/v1
+kind: PrometheusRule
+
+metadata:
+  name: chatapp-node-alerts
+  namespace: monitoring
+  labels:
+    release: monitoring
+
+spec:
+  groups:
+    - name: chatapp.node.alerts
+      rules:
+
+        - alert: ChatAppNodeHighCPU
+          expr: chatapp:node_cpu_usage_percent > 85
+          for: 10m
+          labels:
+            severity: warning
+            component: node
+          annotations:
+            summary: "High CPU usage on node"
+            description: "Node exporter instance {{ $labels.instance }} has CPU usage of {{ $value | printf \"%.2f\" }}%."
+
+        - alert: ChatAppNodeCriticalCPU
+          expr: chatapp:node_cpu_usage_percent > 95
+          for: 5m
+          labels:
+            severity: critical
+            component: node
+          annotations:
+            summary: "Critical CPU usage on node"
+            description: "Node exporter instance {{ $labels.instance }} has CPU usage of {{ $value | printf \"%.2f\" }}%."
+
+        - alert: ChatAppNodeHighMemory
+          expr: chatapp:node_memory_usage_percent > 85
+          for: 10m
+          labels:
+            severity: warning
+            component: node
+          annotations:
+            summary: "High memory usage on node"
+            description: "Node exporter instance {{ $labels.instance }} has memory usage of {{ $value | printf \"%.2f\" }}%."
+
+        - alert: ChatAppNodeCriticalMemory
+          expr: chatapp:node_memory_usage_percent > 95
+          for: 5m
+          labels:
+            severity: critical
+            component: node
+          annotations:
+            summary: "Critical memory usage on node"
+            description: "Node exporter instance {{ $labels.instance }} has memory usage of {{ $value | printf \"%.2f\" }}%."
+
+        - alert: ChatAppNodeFilesystemAlmostFull
+          expr: chatapp:node_filesystem_usage_percent > 85
+          for: 15m
+          labels:
+            severity: warning
+            component: node
+          annotations:
+            summary: "Node filesystem usage is high"
+            description: "Filesystem usage on {{ $labels.instance }} is {{ $value | printf \"%.2f\" }}%."
+
+        - alert: ChatAppNodeNetworkErrors
+          expr: |
+            (
+              chatapp:node_network_receive_errors_per_second
+              +
+              chatapp:node_network_transmit_errors_per_second
+            ) > 0
+          for: 10m
+          labels:
+            severity: warning
+            component: node
+          annotations:
+            summary: "Network errors detected on node"
+            description: "Node exporter instance {{ $labels.instance }} is continuously reporting network errors."

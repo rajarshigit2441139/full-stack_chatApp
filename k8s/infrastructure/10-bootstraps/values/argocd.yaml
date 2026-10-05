@@ -1,0 +1,64 @@
+global:
+  nodeSelector:
+    app: platform
+
+  tolerations:
+  - key: app
+    operator: Equal
+    value: platform
+    effect: NoSchedule
+
+controller:
+  nodeSelector:
+    app: platform
+
+  tolerations:
+  - key: app
+    operator: Equal
+    value: platform
+    effect: NoSchedule
+
+server:
+  service:
+      type: NodePort
+      nodePortHttp: 30081
+      nodePortHttps: 30444
+
+  nodeSelector:
+    app: platform
+
+  tolerations:
+  - key: app
+    operator: Equal
+    value: platform
+    effect: NoSchedule
+
+repoServer:
+  nodeSelector:
+    app: platform
+
+  tolerations:
+  - key: app
+    operator: Equal
+    value: platform
+    effect: NoSchedule
+
+applicationSet:
+  nodeSelector:
+    app: platform
+
+  tolerations:
+  - key: app
+    operator: Equal
+    value: platform
+    effect: NoSchedule
+
+redis:
+  nodeSelector:
+    app: platform
+
+  tolerations:
+  - key: app
+    operator: Equal
+    value: platform
+    effect: NoSchedule
