@@ -59,7 +59,7 @@ spec:
           helm:
             releaseName: '{{releaseName}}'
             valueFiles:
-              - $values/k8s/gitops/00-platform/{{valuesFile}}
+              - $values/k8s/gitops/00-platform/01-applicationset/{{valuesFile}}
 
         # Git repository containing values files
         - repoURL: 'https://github.com/rajarshigit2441139/full-stack_chatApp.git'
