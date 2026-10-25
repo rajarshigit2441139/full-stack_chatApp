@@ -2,7 +2,7 @@ clusterName: chatappcluster
 region: ap-south-1
 
 serviceAccount:
-  create: false
+  create: true
   name: aws-load-balancer-controller
 
 replicaCount: 2
