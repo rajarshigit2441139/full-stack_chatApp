@@ -3,3 +3,4 @@ kind: Kustomization
 resources:
 - backend-ns.yaml
 - frontend-ns.yaml
+- db-ns.yaml
