@@ -26,13 +26,13 @@ spec:
             releaseName: argo-rollouts
             valuesFile: values/patch-argo-rollout.yaml
 
-          - name: mongodb-operator
-            namespace: mongodb-operator
-            repoURL: https://mongodb.github.io/helm-charts
-            chart: community-operator
-            version: "0.13.0"
-            releaseName: mongodb-operator
-            valuesFile: values/patch-mongodb-operator.yaml
+          # - name: mongodb-operator
+          #   namespace: mongodb-operator
+          #   repoURL: https://mongodb.github.io/helm-charts
+          #   chart: community-operator
+          #   version: "0.13.0"
+          #   releaseName: mongodb-operator
+          #   valuesFile: values/patch-mongodb-operator.yaml
 
           - name: prometheus
             namespace: monitoring

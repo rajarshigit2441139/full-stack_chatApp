@@ -1,0 +1,32 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: mongodb-operator
+  namespace: argocd
+
+spec:
+  project: platform-staging
+
+  sources:
+    - repoURL: https://github.com/rajarshigit2441139/full-stack_chatApp.git
+      targetRevision: k8s
+      path: k8s/gitops/00-platform/04-mongodb-operator
+      helm:
+        releaseName: mongodb-operator
+        valueFiles:
+          - $values/k8s/gitops/00-platform/04-mongodb-operator/patch-mongodb-operator.yaml
+
+    - repoURL: https://github.com/rajarshigit2441139/full-stack_chatApp.git
+      targetRevision: k8s
+      ref: values
+
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: mongodb-operator
+
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true
