@@ -11,7 +11,7 @@ spec:
   source:
     repoURL: https://github.com/rajarshigit2441139/full-stack_chatApp.git
     targetRevision: k8s
-    path: k8s/gitops/00-platform/01-applicationset
+    path: k8s/gitops/00-platform/
 
   destination:
     server: https://kubernetes.default.svc
