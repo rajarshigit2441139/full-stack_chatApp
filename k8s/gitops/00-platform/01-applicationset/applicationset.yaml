@@ -6,6 +6,15 @@ metadata:
   namespace: argocd
 
 spec:
+  goTemplate: true
+  templatePatch: |
+    spec:
+      syncPolicy:
+        syncOptions:
+          - CreateNamespace=true
+          {{ if eq .name "prometheus" }}
+          - ServerSideApply=true
+          {{ end }}
   generators:
     - list:
         elements:
@@ -44,7 +53,7 @@ spec:
 
   template:
     metadata:
-      name: '{{name}}'
+      name: '{{ .name }}'
       namespace: argocd
 
     spec:
@@ -87,14 +96,14 @@ spec:
 
       sources:
         # Helm chart
-        - repoURL: '{{repoURL}}'
-          chart: '{{chart}}'
-          targetRevision: '{{version}}'
+        - repoURL: '{{ .repoURL }}'
+          chart: '{{ .chart }}'
+          targetRevision: '{{ .version }}'
 
           helm:
-            releaseName: '{{releaseName}}'
+            releaseName: '{{ .releaseName }}'
             valueFiles:
-              - $values/k8s/gitops/00-platform/01-applicationset/{{valuesFile}}
+              - $values/k8s/gitops/00-platform/01-applicationset/{{ .valuesFile }}
 
         # Git repository containing values files
         - repoURL: 'https://github.com/rajarshigit2441139/full-stack_chatApp.git'
@@ -103,7 +112,7 @@ spec:
 
       destination:
         server: https://kubernetes.default.svc
-        namespace: '{{namespace}}'
+        namespace: '{{ .namespace }}'
 
       syncPolicy:
         automated:
