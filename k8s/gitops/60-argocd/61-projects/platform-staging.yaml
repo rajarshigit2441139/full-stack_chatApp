@@ -30,6 +30,12 @@ spec:
     
     - namespace: db
       server: https://kubernetes.default.svc
+
+    - namespace: front
+      server: https://kubernetes.default.svc
+
+    - namespace: back
+      server: https://kubernetes.default.svc
       
 
   clusterResourceWhitelist:
