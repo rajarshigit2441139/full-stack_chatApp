@@ -7,6 +7,23 @@ metadata:
 
 spec:
   goTemplate: true
+
+  strategy:
+    type: RollingSync
+    rollingSync:
+      steps:
+        - matchExpressions:
+            - key: platform-stage
+              operator: In
+              values:
+                - core
+
+        - matchExpressions:
+            - key: platform-stage
+              operator: In
+              values:
+                - alertmanager
+
   templatePatch: |
     spec:
       syncPolicy:
@@ -16,11 +33,36 @@ spec:
           - ServerSideApply=true
           - DisableClientSideApplyMigration=true
           {{ end }}
+
+      {{ if eq .name "alertmanager" }}
+      source:
+        repoURL: '{{ .repoURL }}'
+        targetRevision: '{{ .targetRevision }}'
+        path: '{{ .path }}'
+      {{ else }}
+      sources:
+        # Helm chart
+        - repoURL: '{{ .repoURL }}'
+          chart: '{{ .chart }}'
+          targetRevision: '{{ .version }}'
+
+          helm:
+            releaseName: '{{ .releaseName }}'
+            valueFiles:
+              - $values/k8s/gitops/00-platform/01-applicationset/{{ .valuesFile }}
+
+        # Git repository containing values files
+        - repoURL: 'https://github.com/rajarshigit2441139/full-stack_chatApp.git'
+          targetRevision: k8s
+          ref: values
+      {{ end }}
+
   generators:
     - list:
         elements:
 
-          - name:  aws-load-balancer-controller
+          - name: aws-load-balancer-controller
+            stage: core
             namespace: kube-system
             repoURL: https://aws.github.io/eks-charts
             chart: aws-load-balancer-controller
@@ -29,6 +71,7 @@ spec:
             valuesFile: values/patch-aws-load-balancer-controller.yaml
 
           - name: argo-rollouts
+            stage: core
             namespace: argo-rollouts
             repoURL: https://argoproj.github.io/argo-helm
             chart: argo-rollouts
@@ -45,6 +88,7 @@ spec:
           #   valuesFile: values/patch-mongodb-operator.yaml
 
           - name: prometheus
+            stage: core
             namespace: monitoring
             repoURL: https://prometheus-community.github.io/helm-charts
             chart: kube-prometheus-stack
@@ -52,10 +96,19 @@ spec:
             releaseName: monitoring
             valuesFile: values/patch-observability.yaml
 
+          - name: alertmanager
+            stage: alertmanager
+            namespace: monitoring
+            repoURL: https://github.com/rajarshigit2441139/full-stack_chatApp.git
+            targetRevision: k8s
+            path: k8s/gitops/00-platform/02-alertmanager
+
   template:
     metadata:
       name: '{{ .name }}'
       namespace: argocd
+      labels:
+        platform-stage: '{{ .stage }}'
 
     spec:
       project: platform-staging
@@ -95,30 +148,14 @@ spec:
             - '.spec.conversion | select(. == {"strategy":"None"})'
             - '.spec.preserveUnknownFields | select(. == false)'
 
-      sources:
-        # Helm chart
-        - repoURL: '{{ .repoURL }}'
-          chart: '{{ .chart }}'
-          targetRevision: '{{ .version }}'
-
-          helm:
-            releaseName: '{{ .releaseName }}'
-            valueFiles:
-              - $values/k8s/gitops/00-platform/01-applicationset/{{ .valuesFile }}
-
-        # Git repository containing values files
-        - repoURL: 'https://github.com/rajarshigit2441139/full-stack_chatApp.git'
-          targetRevision: k8s
-          ref: values
-
       destination:
         server: https://kubernetes.default.svc
         namespace: '{{ .namespace }}'
 
-      syncPolicy:
-        automated:
-          prune: true
-          selfHeal: true
+      # syncPolicy:
+      #   automated:
+      #     prune: true
+      #     selfHeal: true
 
-        syncOptions:
-          - CreateNamespace=true
+      #   syncOptions:
+      #     - CreateNamespace=true

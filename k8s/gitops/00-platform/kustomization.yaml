@@ -3,5 +3,5 @@ kind: Kustomization
 
 resources:
   - 01-applicationset
-  - 02-alertmanager
+  # - 02-alertmanager
   - 03-ingress
