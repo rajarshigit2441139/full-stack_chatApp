@@ -33,6 +33,9 @@ spec:
           - ServerSideApply=true
           - DisableClientSideApplyMigration=true
           {{ end }}
+          {{ if eq .name "aws-load-balancer-controller" }}
+          - RespectIgnoreDifferences=true
+          {{ end }}
 
       {{ if eq .name "alertmanager" }}
       source:
@@ -147,6 +150,23 @@ spec:
           jqPathExpressions:
             - '.spec.conversion | select(. == {"strategy":"None"})'
             - '.spec.preserveUnknownFields | select(. == false)'
+
+        - kind: Secret
+          name: aws-load-balancer-tls
+          jqPathExpressions:
+            - .data
+
+        - group: admissionregistration.k8s.io
+          kind: MutatingWebhookConfiguration
+          name: aws-load-balancer-webhook
+          jqPathExpressions:
+            - '.webhooks[].clientConfig.caBundle'
+
+        - group: admissionregistration.k8s.io
+          kind: ValidatingWebhookConfiguration
+          name: aws-load-balancer-webhook
+          jqPathExpressions:
+            - '.webhooks[].clientConfig.caBundle'
 
       destination:
         server: https://kubernetes.default.svc
