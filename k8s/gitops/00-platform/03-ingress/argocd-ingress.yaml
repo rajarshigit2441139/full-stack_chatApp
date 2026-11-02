@@ -39,7 +39,7 @@ spec:
   ingressClassName: alb
 
   rules:
-    - host: argocd.operation.uk
+    - host: argocd.theoperation.uk
       http:
         paths:
           - path: /

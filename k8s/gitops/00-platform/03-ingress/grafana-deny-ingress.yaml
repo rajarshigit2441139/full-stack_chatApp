@@ -21,7 +21,7 @@ spec:
   ingressClassName: alb
 
   rules:
-    - host: grafana.operation.uk
+    - host: grafana.theoperation.uk
       http:
         paths:
           - path: /

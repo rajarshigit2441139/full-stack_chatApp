@@ -25,7 +25,7 @@ spec:
   ingressClassName: alb
 
   rules:
-    - host: chatone.operation.uk
+    - host: chatone.theoperation.uk
       http:
         paths:
           - path: /

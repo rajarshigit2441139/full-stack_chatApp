@@ -36,7 +36,7 @@ spec:
   ingressClassName: alb
 
   rules:
-    - host: prometheus.operation.uk
+    - host: prometheus.theoperation.uk
       http:
         paths:
           - path: /
