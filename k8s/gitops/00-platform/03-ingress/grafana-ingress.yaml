@@ -12,7 +12,7 @@ metadata:
     alb.ingress.kubernetes.io/scheme: internet-facing
     alb.ingress.kubernetes.io/target-type: ip
 
-    alb.ingress.kubernetes.io/security-groups: "sg-0dbac7bb65f681929"
+    alb.ingress.kubernetes.io/security-groups: "sg-0e5493efc9538dcd1"
     alb.ingress.kubernetes.io/manage-backend-security-group-rules: "true"
 
     alb.ingress.kubernetes.io/listen-ports: '[{"HTTPS":443}]'
