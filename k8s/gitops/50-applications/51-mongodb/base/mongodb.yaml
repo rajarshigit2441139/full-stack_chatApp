@@ -33,7 +33,7 @@ spec:
         - metadata:
             name: data-volume
           spec:
-            storageClassName: gp2
+            storageClassName: gp2-csi
             accessModes:
               - ReadWriteOnce
             resources:
@@ -42,7 +42,7 @@ spec:
         - metadata:
             name: logs-volume
           spec:
-            storageClassName: gp2
+            storageClassName: gp2-csi
             accessModes:
               - ReadWriteOnce
             resources:
