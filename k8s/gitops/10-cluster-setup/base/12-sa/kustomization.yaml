@@ -3,3 +3,4 @@ kind: Kustomization
 resources:
 - backend-sa.yaml
 - frontend-sa.yaml
+- mongodb-secret-sync-sa.yaml
