@@ -39,3 +39,12 @@ spec:
             resources:
               requests:
                 storage: 5Gi
+        - metadata:
+            name: logs-volume
+          spec:
+            storageClassName: gp2
+            accessModes:
+              - ReadWriteOnce
+            resources:
+              requests:
+                storage: 2G
