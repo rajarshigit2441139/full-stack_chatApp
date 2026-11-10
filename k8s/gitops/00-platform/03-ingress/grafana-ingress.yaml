@@ -27,7 +27,7 @@ metadata:
         {
           "field": "source-ip",
           "sourceIpConfig": {
-            "values": ["223.185.28.63/32"]
+            "values": ["223.185.35.176/32"]
           }
         }
       ]
