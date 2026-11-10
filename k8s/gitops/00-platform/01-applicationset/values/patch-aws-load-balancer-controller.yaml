@@ -1,6 +1,6 @@
 clusterName: chatappcluster
 region: ap-south-1
-vpcId: vpc-0d787f76463034693
+vpcId: vpc-08295be9a29beba31
 serviceAccount:
   create: true
   name: aws-load-balancer-controller
