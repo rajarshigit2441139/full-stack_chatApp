@@ -50,8 +50,8 @@ spec:
         - name: JWT_SECRET
           valueFrom:
             secretKeyRef:
-            name: backend-secrets
-            key: jwt-secret
+              name: backend-secrets
+              key: jwt-secret
         resources:
           limits:
             memory: "512Mi"
