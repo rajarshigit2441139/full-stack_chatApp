@@ -30,7 +30,7 @@ metadata:
         {
           "field": "source-ip",
           "sourceIpConfig": {
-            "values": ["122.168.89.123/32"] 
+            "values": ["122.168.95.215/32"] 
           }
         }
       ]
