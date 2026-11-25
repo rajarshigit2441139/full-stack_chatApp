@@ -32,6 +32,7 @@ spec:
           {{ if eq .name "prometheus" }}
           - ServerSideApply=true
           - DisableClientSideApplyMigration=true
+          - RespectIgnoreDifferences=true
           {{ end }}
           {{ if eq .name "aws-load-balancer-controller" }}
           - RespectIgnoreDifferences=true
@@ -167,6 +168,22 @@ spec:
           name: aws-load-balancer-webhook
           jqPathExpressions:
             - '.webhooks[].clientConfig.caBundle'
+
+        # Preserve Grafana's existing generated admin password
+        - group: ""
+          kind: Secret
+          name: monitoring-grafana
+          namespace: monitoring
+          jqPathExpressions:
+            - '.data["admin-password"]'
+
+        # Prevent password checksum changes from triggering Deployment drift
+        - group: apps
+          kind: Deployment
+          name: monitoring-grafana
+          namespace: monitoring
+          jqPathExpressions:
+            - '.spec.template.metadata.annotations["checksum/secret"]'
 
       destination:
         server: https://kubernetes.default.svc
