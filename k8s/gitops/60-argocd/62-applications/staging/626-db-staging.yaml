@@ -8,10 +8,22 @@ metadata:
 spec:
   project: application-staging
 
+  ignoreDifferences:
+    # Ignore Kubernetes-injected default tolerations
+    - group: ""
+      kind: Pod
+      name: mongodb-secret-sync
+      namespace: db
+      jqPathExpressions:
+        - '.spec.tolerations[] | select(.key == "node.kubernetes.io/not-ready" or .key == "node.kubernetes.io/unreachable")'
+
+        # Ignore the EKS Pod Identity token volume
+        - '.spec.volumes[] | select(.name == "eks-pod-identity-token")'
+
   source:
     repoURL: https://github.com/rajarshigit2441139/full-stack_chatApp.git
     targetRevision: k8s
-    path:  k8s/gitops/50-applications/51-mongodb/overlays/staging
+    path: k8s/gitops/50-applications/51-mongodb/overlays/staging
 
   destination:
     server: https://kubernetes.default.svc
@@ -21,3 +33,5 @@ spec:
     automated:
       prune: true
       selfHeal: true
+    syncOptions:
+      - RespectIgnoreDifferences=true
